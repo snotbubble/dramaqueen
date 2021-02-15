@@ -37,6 +37,7 @@ Red [
 ;; [?] choose html template (scan res dir)
 ;; [ ] save/load setup fields, template & preset selection
 ;; [ ] allow setup field tags in t&cs
+;; [ ] fit survey iframe size to content, disable scrolling
 ;; [!] resizable ui
 ;; [ ] resize limiting
 ;; [ ] redo preset ui if/when drop-down is fixed
@@ -69,11 +70,10 @@ clauser: function [t s m] [
 		td: 0
 
 ;; get indentation values, retain previous value if line is blank
-;; d is absolute indentation, 1 to 4, with 1 being the section headers, 2~4 for whatever is entered
+;; td is current indentation, d is next-line indentation
+;; indentation is 2 to 4, with 1 being reserved for section headers
 
 		foreach line s [
-			;print [ "^-checking line: " (trim line) ]
-			;probe line
 			either (line/1 = j) [
 				d: 3
 				if (line/2 = j) [ d: 4 ]
@@ -112,35 +112,36 @@ clauser: function [t s m] [
 
 			if tsx/1 = j [ tsx: replace tsx "--" "" ]
 			if tsx/1 = j [ tsx: replace tsx "-" "" ]
-			print [ "current = " td "^/next = " d "^/offset = " ofs ]
+			;print [ "current = " td "^/next = " d "^/offset = " ofs ]
 
 ;; tagging
 
 			if x <= (length? tbs) [
 				if ofs = 1 [
-					print [ "^-next line is indented" ]
+					;print [ "^-next line is indented" ]
 					o: rejoin[ o pws li tsx cli m/(d)/1 "^/" ]
 				]
 				if ofs = 2 [
-					print [ "^-next line is indented by 2" ]
+					;print [ "^-next line is indented by 2" ]
 					o: rejoin[ o pws li tsx cli m/(d - 1)/1 "^/" pws "^-" m/(d)/1 "^/" ]
 				]
 				if ofs = 0 [
-					print [ "^-next line is on the same level" ]
+					;print [ "^-next line is on the same level" ]
 					if tsx <> "" [ o: rejoin[ o pws li tsx cli "^/" ] ]
 				]
 				if ofs = -1 [
-					print [ "^-next line is unindented by 1" ]
+					;print [ "^-next line is unindented by 1" ]
 					o: rejoin[ o pws li tsx cli "^/" (take/part (copy pws) (td - 2)) m/(td)/2 "^/" ]
 				]
 				if ofs = -2 [
-					print [ "^-next line is unindented by 2" ]
+					;print [ "^-next line is unindented by 2" ]
 					o: rejoin[ o pws li tsx cli "^/" (take/part (copy pws) (td - 2)) m/(td)/2 "^/" (take/part (copy pws) (td - 3)) m/(d - 1)/2 "^/" ]
 				]
 			] 
 		]
 
 ;; close off tags left open
+
 		td: td - 2
 		while [td > 0] [
 			pws: ""
@@ -148,7 +149,7 @@ clauser: function [t s m] [
 			append o rejoin [ pws m/:d/2 "^/" ] td: td - 1 d: d - 1 
 		]
 		append o m/2/2
-		print o
+		;print o
 		return o
 	]
 ]
