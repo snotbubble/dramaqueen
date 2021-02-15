@@ -7,9 +7,10 @@ Red [
 ;; dir/file requrements
 ;;  this_program
 ;;  ./src
-;;    template_base.html
+;;    (client supplied files)
 ;;  ./res
-;;    preset_blank.pxx
+;;    template_default.html
+;;    preset_blank.tnc
 ;;  ./pub
 ;;    /fonts
 ;;    /images
@@ -21,99 +22,137 @@ Red [
 ;; [promotiontitle]
 ;; [promotiontncs]
 
+;; ! : doing it
+;; ? : having problems with it
+;; - : dropped it
+
 ;; TODO
-;; [X] make html template
-;; [X] add minimal set of setup fields
-;; [ ] add html source preview
-;; [ ] (maybe) add banner and bg images
-;; [ ] (impossible?) add html render preview
-;; [X] t&c builder interface
-;; [X] t&c to html function
-;; [X] use common legal document structure names for t&cs
-;; [X] t&c indentation params
-;; [X] save and load t&cs
-;; [ ] strip dash prefixes from t&c text
-;; [ ] load saved t&c indentation markers
-;; [ ] fix no-show of 1st t&c article
-;; [ ] skip t&c article if nothing is in it
+;; [-] add banner and bg images
+;; [?] add html render preview
+;; [!] fix no-show of 1st t&c article
+;; [ ] skip bg html if bg.png is missing, use white instead
 ;; [ ] upload generic html template, preset, bg and banner
-;; [ ] add client field to setup
-;; [ ] add start/end date fields to setup
-;; [ ] save/load all fields except t&cs (load chosen t&c preset instead)
-;; [ ] embed setup field tags in t&cs
-;; [-] resizable ui
+;; [!] add client field to setup
+;; [!] add start/end date fields to setup
+;; [?] choose html template (scan res dir)
+;; [ ] save/load setup fields, template & preset selection
+;; [ ] allow setup field tags in t&cs
+;; [!] resizable ui
 ;; [ ] resize limiting
 ;; [ ] redo preset ui if/when drop-down is fixed
+;; [ ] optimize
+;; [ ] redify
 ;; [ ] (maybe) automatically convert formatting of t&c text on drop
 ;; [ ] (impossible?) add ftp upload tab & params
-;; [ ] (maybe) use markup in t&c text, probably orgmode-compatible
+;; [ ] (maybe) use a common markup in t&c text, probably orgmode
+
 
 prin [ "loading source template..." ]
-h: read %./src/base_template.html
-;print h
-print [ "OK" ]
+h: read %./res/template_default.html
 
-prin [ "writing clauser function..." ]
 clauser: function [t s m] [
 	print [ "clauser triggered..." ]
-	o: rejoin ["<li>" t "</li>" m/2/1 "^/"]
-	c: 1
-	d: 0
-	tbs: copy []
-	j: #"-"
-	;probe s
-	;print [ "s=" s ]
-	;print [ "length =" (length? s) ]
-	either (length? s) > 1 [
+	;print [ "^-clauser indentation = " m ]
+	print [ "^-clauser strings = " s ]
+	probe s
+
+;; skip if empty
+
+	either ((length? s) = 1) and (s/1 = "") [
+		return ""
+	] [
+		o: rejoin ["<li>" t "</li>" m/2/1 "^/"]
+		c: 1
+		d: 2
+		tbs: copy []
+		j: #"-"
+		td: 0
+
+;; get indentation values, retain previous value if line is blank
+;; d is absolute indentation, 1 to 4, with 1 being the section headers, 2~4 for whatever is entered
+
 		foreach line s [
-			;print [ "	line: " line ]
+			;print [ "^-checking line: " (trim line) ]
+			;probe line
 			either (line/1 = j) [
-				d: 1
-				if (line/2 = j) [ d: 2 ]
+				d: 3
+				if (line/2 = j) [ d: 4 ]
 			] [
-				if ((trim line) <> "") [ d: 0] 
+				if ((trim line) <> "") [ d: 2] 
 			]
 			append tbs d
 		]
-		;probe tbs
-		
+
+;; loop through lines of text, indent and tag as required
+
 		repeat x (length? tbs) [
+		
+;; calc next-depth and offset
+;; offset is -1 to account for depth of 1 being reserved for headers
+		
 			g: max 0 (min (x + 1) (length? tbs))
 			od: tbs/:g
 			td: tbs/:x
-			ofs: od - td
-			d: d + ofs
-			;print [ "ofs=" ofs " td=" td " depth=" d ]
-			if x <= (length? tbs) [ 
+			ofs: (od - 1) - (td - 1)
+			d: td + ofs
+			tsx: trim copy s/:x
+
+;; tab indent
+
+			pws: copy [] 
+			loop (td - 1) [ append pws "^-" ]
+
+;; list-tags
+
+			li: "<li>"
+			cli: "</li>"
+			if tsx = "" [ li: "" cli: "" ]
+
+;; remove markers
+
+			if tsx/1 = j [ tsx: replace tsx "--" "" ]
+			if tsx/1 = j [ tsx: replace tsx "-" "" ]
+			print [ "current = " td "^/next = " d "^/offset = " ofs ]
+
+;; tagging
+
+			if x <= (length? tbs) [
 				if ofs = 1 [
-					either d = 2 [
-						o: rejoin[ o "<li>" s/:x "</li>" m/4/1 "^/" ]
-					] [
-						o: rejoin[ o "<li>" s/:x "</li>" m/3/1 "^/" ]
-					]
+					print [ "^-next line is indented" ]
+					o: rejoin[ o pws li tsx cli m/(d)/1 "^/" ]
+				]
+				if ofs = 2 [
+					print [ "^-next line is indented by 2" ]
+					o: rejoin[ o pws li tsx cli m/(d - 1)/1 "^/" pws "^-" m/(d)/1 "^/" ]
 				]
 				if ofs = 0 [
-					;print [ "s/:x = " s/:x ]
-					if (trim s/:x) <> "" [
-						o: rejoin[ o "<li>" s/:x "</li>^/" ]
-					]
+					print [ "^-next line is on the same level" ]
+					if tsx <> "" [ o: rejoin[ o pws li tsx cli "^/" ] ]
 				]
 				if ofs = -1 [
-					o: rejoin[ o "<li>" s/:x "</li>"m/3/2"^/" ]
+					print [ "^-next line is unindented by 1" ]
+					o: rejoin[ o pws li tsx cli "^/" (take/part (copy pws) (td - 2)) m/(td)/2 "^/" ]
 				]
 				if ofs = -2 [
-					o: rejoin[ o "<li>" s/:x "</li>"m/3/2 m/3/2"^/" ]
+					print [ "^-next line is unindented by 2" ]
+					o: rejoin[ o pws li tsx cli "^/" (take/part (copy pws) (td - 2)) m/(td)/2 "^/" (take/part (copy pws) (td - 3)) m/(d - 1)/2 "^/" ]
 				]
-			]
+			] 
 		]
-	] [ 
-		;print [ "single section = " s ]
-		if (trim s) <> "" [ o: rejoin[ o "<li>" s/1 "</li>^/" ] ]
+
+;; close off tags left open
+		td: td - 2
+		while [td > 0] [
+			pws: ""
+			loop td [ pws: rejoin [pws "^-"] ]
+			append o rejoin [ pws m/:d/2 "^/" ] td: td - 1 d: d - 1 
+		]
+		append o m/2/2
+		print o
+		return o
 	]
-	append o m/2/2
-	;print o
-	o
 ]
+
 print [ "OK" ]
 
 
@@ -131,22 +170,21 @@ tncs: context [
 
 sidx: 1
 
-;prin [ "generating clause toggles..." ]
-;bcmd: []
-;repeat x length? tncs/thead [ 
-;	append bcmd  compose/deep [ base 320x30 (tncs/thead/:x) [ foreach-face v [ if face/type = 'base [ face/color: gray ] ] face/color:papaya sidx: (:x) cl/text: (tncs/ttext/:x) ] return ]
-;]
-;print [ "OK" ]
-
 prin [ "writing writesrc function..." ]
 writesrc: function [n s c ht i] [
 	print [ "writesrc triggered..." ]
+	;print [ "survey = " s ]
+	probe s
 	o: copy ht
 	l: copy c
 	g: take/last l
 	;probe l
 	replace o "[promotiontitle]" n
-	replace o "[surveyurl]" s
+	either (none? s) or (s = "") [
+		replace o "[surveyurl]" ""
+	] [
+		replace o "[surveyurl]" rejoin ["<div id=^"mid-container^" align=^"center^"> ^/ ^- <iframe height=^"700^" width=^"640^" frameborder=^"0^" allowtransparency=^"true^" style=^"background: #FFFFFF;^" src=^"" s "^"></iframe>^/</div>"]
+	]
 	replace o "[promotiontncs]" (rejoin [i/1 "^/" (rejoin l ) i/2 "^/" g])
 	write %./pub/test.html o
 	o
@@ -166,8 +204,7 @@ v: layout [
 				text "promotion name"
 				return
 				pname: field 780x30 on-change [
-					u: "..."
-					if survey/text <> none [ u: survey/text ]
+					u: survey/text
 					n: "..."
 					if pname/text <> none [ n: pname/text ]
 					print [ "name changed..." ]
@@ -184,8 +221,7 @@ v: layout [
 				text "survey url"
 				return
 				survey: field 780x30 on-change [
-					u: "..."
-					if survey/text <> none [ u: survey/text ]
+					u: survey/text
 					n: "..."
 					if pname/text <> none [ n: pname/text ]
 					print [ "survey changed..." ]
@@ -208,19 +244,36 @@ v: layout [
 				;	face/text: pick face/data face/selected
 				;]
 				button "load" 80x30 [
-					pf: request-file/title/file/filter "load preset" %./res/ ["presets" "*.pxx"]
+					pf: request-file/title/file/filter "load preset" %./res/ ["presets" "*.tnc"]
 					tncs: do read pf
+					tta/selected: tncs/tind/1
+					ttb/selected: tncs/tind/2
+					ttc/selected: tncs/tind/3
+					ttd/selected: tncs/tind/4
 					parse (to-string pf) [thru "preset_" copy pxn to "." ]
 					svl/text: pxn
-					sidx: atcl/selected cl/text: (tncs/ttext/:sidx)
+					sidx: atcl/selected 
+					cl/text: (tncs/ttext/:sidx)
+					u: survey/text
+					n: "..."
+					if pname/text <> none [ n: pname/text ]
+					m: writesrc n u tncs/thtml h indents/(tncs/tind/1)
+					viewsrc/text: m
 				]
 				button "save" 80x30 [
-					write to-file (rejoin ["./res/preset_" svl/text ".pxx"]) tncs
+					write to-file (rejoin ["./res/preset_" svl/text ".tnc"]) tncs
 				]
 				return
 				text 80x30 "section"
-				atcl: drop-list 300x30 select 1 data tncs/thead [
-					sidx: face/selected cl/text: (tncs/ttext/:sidx)
+				atcl: drop-list 400x30 select 1 data tncs/thead [
+					sidx: face/selected
+					cl/text: (tncs/ttext/:sidx)
+					tncs/thtml/:sidx: clauser tncs/thead/:sidx (split cl/text newline) reduce [ indents/(tta/selected) indents/(ttb/selected) indents/(ttc/selected) indents/(ttd/selected) ]
+				]
+				pad 10x0 tcln: field 40x30 on-enter [ 
+					tncs/thead/:sidx: face/text
+					atcl/data: tncs/thead
+					atcl/selected: sidx
 				]
 			]
 			;across
@@ -230,8 +283,7 @@ v: layout [
 				cl: area 580x220 40.40.40 [
 					tncs/ttext/:sidx: face/text
 					tncs/thtml/:sidx: clauser tncs/thead/:sidx (split face/text newline) reduce [ indents/(tta/selected) indents/(ttb/selected) indents/(ttc/selected) indents/(ttd/selected) ]
-					u: "..."
-					if survey/text <> none [ u: survey/text ]
+					u: survey/text
 					n: "..."
 					if pname/text <> none [ n: pname/text ]
 					print [ "clause changed..." ]
@@ -243,25 +295,25 @@ v: layout [
 				text "indent articles with"
 				tta: drop-list 180x30 select 6 data indentlabels [ 
 					face/text: pick face/data face/selected 
-					print [ indents/(face/selected) ]
+					print [ "indent x1 tag : " indents/(face/selected) ]
 				]
 				return
 				text "indent sections with^-"
 				ttb: drop-list 180x30 select 2 data indentlabels [
 					face/text: pick face/data face/selected 
-					print [ indents/(face/selected) ]
+					print [ "indent x2 tag : " indents/(face/selected) ]
 				]
 				return
 				text "indent clauses with^-^-^-"
 				ttc: drop-list 180x30 select 5 data indentlabels [
 					face/text: pick face/data face/selected 
-					print [ indents/(face/selected) ]
+					print [ "indent x3 tag : " indents/(face/selected) ]
 				]
 				return
 				text "indent paragraphs with^-^-^-"
 				ttd: drop-list 180x30 select 1 data indentlabels [
 					face/text: pick face/data face/selected 
-					print [ indents/(face/selected) ]
+					print [ "indent x4 tag : " indents/(face/selected) ]
 				]
 			]
 		]
@@ -275,7 +327,9 @@ view/flags/options v [resize] [
 			;face/size/x: min (max face/size/x 1024) 610
 			tp/size: face/size - 20x50
 			cc/size: face/size - 40x400
+			sp/size/x: face/size/x - 40
 			cl/size: face/size - 60x420
+			tcln/size/x: face/size/x - ( tcln/offset/x + 50 )
 			tt/offset/y: face/size/y - 280
         ]
     ]
