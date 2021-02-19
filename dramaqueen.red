@@ -27,19 +27,17 @@ Red [
 ;; - : dropped it
 
 ;; TODO
-;; [ ] write loaded banner to pub/images/banner.png, with confirmation
 ;; [?] add html render preview
 ;; [!] fix no-show of 1st t&c article
 ;; [ ] skip bg html if bg.png is missing, use white instead
 ;; [ ] upload generic html template, preset, bg and banner
 ;; [?] choose html template (scan res dir)
-;; [!] allow setup field tags in t&cs
+;; [ ] allow setup field tags in t&cs
 ;; [ ] fit survey iframe size to content, disable scrolling
 ;; [?] fix tab-panel size vs menu
-;; [!] resizable ui
+;; [?] resizable ui
 ;; [?] resize limiting
 ;; [?] redo preset ui if/when drop-down is fixed
-;; [ ] consolidate duplicate code
 ;; [ ] optimize
 ;; [ ] redify
 ;; [ ] (maybe) automatically convert formatting of t&c text on drop
@@ -50,6 +48,9 @@ Red [
 prin [ "loading source template..." ]
 h: read %./res/template_default.html
 print [ "OK" ]
+
+;; display tile only, not used for anything else
+promotionfilename: "DramaQueen"
 
 prin [ "writing clauser function..." ]
 clauser: function [t s m] [
@@ -214,9 +215,40 @@ fittopane: function [ii ps] [
 ]
 print [ "OK" ]
 
+prin [ "writing loadtnc func..." ]
+loadtnc: func [ presetfile ] [
+	print [ "loadtnc func triggered..." ]
+	either not (none? presetfile) [
+		either exists? presetfile [
+			print [ "opening tncs from file..." ]
+			clear tncs/thead
+			clear tncs/ttext
+			clear tncs/thtml
+			tncs: do read presetfile
+			tta/selected: tncs/tind/1
+			ttb/selected: tncs/tind/2
+			ttc/selected: tncs/tind/3
+			ttd/selected: tncs/tind/4
+			parse (to-string presetfile) [thru "preset_" copy pxn to "." ]
+			sidx: atcl/selected 
+			atcl/data: tncs/thead
+			svl/text: pxn
+			atcl/selected: sidx
+			cl/text: (tncs/ttext/:sidx)
+			u: survey/text
+			n: "..."
+			if pname/text <> none [ n: pname/text ]
+			m: writesrc n u tncs/thtml h indents/(tncs/tind/1)
+			viewsrc/text: m
+			;probe tncs/thtml/:sidx
+		] [ print [ "^-can't find preset file: " presetfile ] ]
+	] [ print [ "^-preset file not set: " presetfile ] ]
+]
+print [ "OK" ]
+
 prin [ "making the ui..." ]
 v: layout [
-	title "DramaQueen"
+	title promotionfilename
 	tp: tab-panel 600x400 [
 		"Setup" [
 			below
@@ -231,22 +263,33 @@ v: layout [
 					print [ "name changed..." ]
 					m: writesrc n u tncs/thtml h indents/(tta/selected)
 					viewsrc/text: m
+					v/text: (rejoin [promotionfilename " *"])
 				]
 				
 				text "client name"
-				clientname: field 780x30
+				clientname: field 780x30 on-change [
+					v/text: (rejoin [promotionfilename " *"])
+				]
 				
 				text "promotion start (dd mm yyyy)"
-				starting: field 780x30
+				starting: field 780x30 on-change [
+					v/text: (rejoin [promotionfilename " *"])
+				]
 				
 				text "promotion end (dd mm yyyy)"
-				ending: field 780x30
+				ending: field 780x30 on-change [
+					v/text: (rejoin [promotionfilename " *"])
+				]
 				
 				text "site url"
-				siteurl: field 780x30
+				siteurl: field 780x30 on-change [
+					v/text: (rejoin [promotionfilename " *"])
+				]
 				
 				text "site username"
-				siteusr: field 780x30
+				siteusr: field 780x30 on-change [
+					v/text: (rejoin [promotionfilename " *"])
+				]
 				
 				text "survey url"
 				survey: field 780x30 on-change [
@@ -256,77 +299,66 @@ v: layout [
 					print [ "survey changed..." ]
 					m: writesrc n u tncs/thtml h indents/(tta/selected)
 					viewsrc/text: m
+					v/text: (rejoin [promotionfilename " *"])
 				]
 			]
 		]
 		"Banner image" [
 			below
-			text "click below to load banner image"
+			bpp: panel 580x50 [
+				text "click below to source banner image"
+				heb: check true "overwrite ./pub/images/banner.png"
+			]
 			bp: panel 100x100 [
 				bi: image 500x500 on-up [
 					bi/image: load request-file/filter ["pics" "*.png; *jpg"]
-					fittopane bi bp/size
+					either heb/data [
+						save %./pub/images/banner.png bi/image
+					] [
+						if not (exists? %./pub/images/banner.png) [
+							save %./pub/images/banner.png bi/image
+						]
+					]
+					fittopane bi (bp/size - 0x30)
 				]
 			]
 		]
-		"Terms and conditions"[
+		"Terms and Conditions"[
 			below
 			sp: panel 590x100 [
 				text 80x30 "preset"
 				svl: field 300x30 "blank"
-				;svl: drop-down 300x30 select 1 data[ "blank" ] [ 
-				;	face/text: pick face/data face/selected
-				;]
 				button "load" 80x30 [
 					pf: request-file/title/file/filter "load preset" %./res/ ["presets" "*.tnc"]
-					if not (none? pf) [
-						tncs: do read pf
-						tta/selected: tncs/tind/1
-						ttb/selected: tncs/tind/2
-						ttc/selected: tncs/tind/3
-						ttd/selected: tncs/tind/4
-						parse (to-string pf) [thru "preset_" copy pxn to "." ]
-						sidx: atcl/selected 
-						atcl/data: tncs/thead
-						svl/text: pxn
-						atcl/selected: sidx
-						cl/text: (tncs/ttext/:sidx)
-						u: survey/text
-						n: "..."
-						if pname/text <> none [ n: pname/text ]
-						m: writesrc n u tncs/thtml h indents/(tncs/tind/1)
-						viewsrc/text: m
-						probe tncs/thtml/:sidx
-					]
+					loadtnc pf
+					v/text: (rejoin [promotionfilename " *"])
+					sp/color: none
 				]
 				button "save" 80x30 [
 					write to-file (rejoin ["./res/preset_" svl/text ".tnc"]) tncs
+					sp/color: none
 				]
 				return
 				text 80x30 "section"
 				atcl: drop-list 400x30 select 1 data tncs/thead [
 					print [ "section list changed..." ]
+					ocol: sp/color
 					sidx: face/selected
 					probe sidx
 					print [ "tncs/ttext/:sidx = " tncs/ttext/:sidx ]
 					cl/text: tncs/ttext/:sidx
 					tcln/text: tncs/thead/:sidx
-
-;; backwash if tnc datastructure or write-rules change
-
-					;tncs/thtml/:sidx: clauser tncs/thead/:sidx (split cl/text newline) reduce [ indents/(tta/selected) indents/(ttb/selected) indents/(ttc/selected) indents/(ttd/selected) ]
+					sp/color: ocol
 				]
-				pad 10x0 tcln: field 40x30 on-enter [ 
+				pad 10x0 tcln: field 40x30 on-enter [
 					if (face/text <> "") and (face/text <> none) [
 						tncs/thead/:sidx: face/text
 						atcl/data: tncs/thead
 						atcl/selected: sidx
+						sp/color: 100.70.55
 					]
 				]
 			]
-			;across
-			;pp: panel 340x540 [ ] bcmd
-			;below
 			cc: panel 590x240 [
 				cl: area 580x220 40.40.40 font-name "consolas" font-size 10 [
 					print [ "clause changed..." ]
@@ -337,6 +369,7 @@ v: layout [
 					if pname/text <> none [ n: pname/text ]
 					m: writesrc n u tncs/thtml h indents/(tta/selected)
 					viewsrc/text: m
+					sp/color: 100.70.55
 				]
 			]
 			tt: panel 440x180 [
@@ -344,6 +377,7 @@ v: layout [
 				tta: drop-list 180x30 select 6 data indentlabels [ 
 					face/text: pick face/data face/selected
 					tncs/tind/1: face/selected
+					;sp/color: 100.70.55
 					;print [ "indent x1 tag : " indents/(face/selected) ]
 				]
 				return
@@ -351,6 +385,7 @@ v: layout [
 				ttb: drop-list 180x30 select 2 data indentlabels [
 					face/text: pick face/data face/selected
 					tncs/tind/2: face/selected
+					;sp/color: 100.70.55
 					;print [ "indent x2 tag : " indents/(face/selected) ]
 				]
 				return
@@ -358,6 +393,7 @@ v: layout [
 				ttc: drop-list 180x30 select 5 data indentlabels [
 					face/text: pick face/data face/selected
 					tncs/tind/3: face/selected
+					;sp/color: 100.70.55
 					;print [ "indent x3 tag : " indents/(face/selected) ]
 				]
 				return
@@ -365,6 +401,7 @@ v: layout [
 				ttd: drop-list 180x30 select 1 data indentlabels [
 					face/text: pick face/data face/selected
 					tncs/tind/4: face/selected
+					sp/color: 100.70.55
 					;print [ "indent x4 tag : " indents/(face/selected) ]
 				]
 			]
@@ -375,7 +412,9 @@ v: layout [
 			]
 		]
 		"Upload" [
-		
+
+;; no ftp for Red, so make a bash cmd here and run it
+
 		]
 	]
 ]
@@ -403,37 +442,14 @@ view/flags/options v [resize] [
 						siteusr/text: pset/6 
 						survey/text: pset/7 
 						svl/text: pset/8
-						
-;; duplicate code to load tnc preset, try putting this in a func
-						
 						pf: to-file (rejoin ["./res/preset_" svl/text ".tnc"])
-						if exists? pf [
-							if not (none? pf) [
-								print [ "opening tncs from file..." ]
-								probe tncs/ttext/8
-								clear tncs/thead
-								clear tncs/ttext
-								clear tncs/thtml
-								tncs: do read pf
-								probe tncs/ttext/8
-								tta/selected: tncs/tind/1
-								ttb/selected: tncs/tind/2
-								ttc/selected: tncs/tind/3
-								ttd/selected: tncs/tind/4
-								parse (to-string pf) [thru "preset_" copy pxn to "." ]
-								sidx: atcl/selected 
-								atcl/data: tncs/thead
-								svl/text: pxn
-								atcl/selected: sidx
-								cl/text: (tncs/ttext/:sidx)
-								u: survey/text
-								n: "..."
-								if pname/text <> none [ n: pname/text ]
-								m: writesrc n u tncs/thtml h indents/(tncs/tind/1)
-								viewsrc/text: m
-								probe tncs/thtml/:sidx
-							]
+						loadtnc pf
+						promotionfilename: (rejoin ["./res/promotion_" pname/text ".pro"])
+						v/text: promotionfilename
+						if exists? %./pub/images/banner.png  [
+							bi/image: load %./pub/images/banner.png
 						]
+						sp/color: none
 					]
 				]
 				stp [
@@ -441,6 +457,9 @@ view/flags/options v [resize] [
 					pset: reduce [ pname/text clientname/text starting/text ending/text siteurl/text siteusr/text survey/text svl/text ]
 					repeat st (length? pset) [ if none? pset/:st [ pset/:st: "" ]] 
 					write to-file (rejoin ["./res/promotion_" pname/text ".pro"]) pset
+					promotionfilename: (rejoin ["./res/promotion_" pname/text ".pro"])
+					v/text: promotionfilename
+					sp/color: none
 				]
 			]
 		]
@@ -456,7 +475,7 @@ view/flags/options v [resize] [
 			viewsrc/size: face/size - 60x130
 			sup/size: face/size - 40x110
 			bp/size: face/size - 40x140
-            fittopane bi bp/size
+            fittopane bi (bp/size - 0x30)
         ]
     ]
 ]
