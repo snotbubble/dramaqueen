@@ -32,8 +32,6 @@ Red [
 ;; [ ] skip bg html if bg.png is missing, use white instead
 ;; [ ] upload generic html template, preset, bg and banner
 ;; [?] choose html template (scan res dir)
-;; [ ] allow setup field tags in t&cs
-;; [ ] fit survey iframe size to content, disable scrolling
 ;; [?] fix tab-panel size vs menu
 ;; [?] resizable ui
 ;; [?] resize limiting
@@ -116,6 +114,7 @@ clauser: function [t s m] [
 			if tsx/1 = j [ tsx: replace tsx "-" "" ]
 			;print [ "current = " td "^/next = " d "^/offset = " ofs ]
 
+
 ;; tagging
 
 			if x <= (length? tbs) [
@@ -139,7 +138,7 @@ clauser: function [t s m] [
 					;print [ "^-next line is unindented by 2" ]
 					o: rejoin[ o pws li tsx cli "^/" (take/part (copy pws) (td - 2)) m/(td)/2 "^/" (take/part (copy pws) (td - 3)) m/(d - 1)/2 "^/" ]
 				]
-			] 
+			]
 		]
 
 ;; close off tags left open
@@ -178,7 +177,7 @@ pset: [ "" "" "" "" "" "" "" "blank" ]
 sidx: 1
 
 prin [ "writing writesrc function..." ]
-writesrc: function [n s c ht i] [
+writesrc: function [n s c ht i u] [
 	;print [ "writesrc triggered..." ]
 	;print [ "survey = " s ]
 	;probe s
@@ -193,6 +192,14 @@ writesrc: function [n s c ht i] [
 		replace o "[surveyurl]" rejoin ["<div id=^"mid-container^" align=^"center^"> ^/ ^- <iframe height=^"700^" width=^"640^" frameborder=^"0^" allowtransparency=^"true^" style=^"background: #FFFFFF;^" src=^"" s "^"></iframe>^/</div>"]
 	]
 	replace o "[promotiontncs]" (rejoin [i/1 "^/" (rejoin l ) i/2 "^/" g])
+
+;; insert field text
+
+	repeat fx ((length? u) - 1) [
+		if fx % 2 = 1 [
+			o: replace o u/:fx u/(fx + 1)
+		]
+	]
 	write %./pub/test.html o
 	o
 ]
@@ -261,23 +268,32 @@ v: layout [
 					n: "..."
 					if pname/text <> none [ n: pname/text ]
 					print [ "name changed..." ]
-					m: writesrc n u tncs/thtml h indents/(tta/selected)
+					m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected)
 					viewsrc/text: m
 					v/text: (rejoin [promotionfilename " *"])
 				]
 				
 				text "client name"
 				clientname: field 780x30 on-change [
+					ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
+					m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
+					viewsrc/text: m
 					v/text: (rejoin [promotionfilename " *"])
 				]
 				
-				text "promotion start (dd mm yyyy)"
+				text "promotion start (dd-mm-yyyy)"
 				starting: field 780x30 on-change [
+					ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
+					m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
+					viewsrc/text: m
 					v/text: (rejoin [promotionfilename " *"])
 				]
 				
-				text "promotion end (dd mm yyyy)"
+				text "promotion end (dd-mm-yyyy)"
 				ending: field 780x30 on-change [
+					ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
+					m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
+					viewsrc/text: m
 					v/text: (rejoin [promotionfilename " *"])
 				]
 				
@@ -294,10 +310,10 @@ v: layout [
 				text "survey url"
 				survey: field 780x30 on-change [
 					u: survey/text
-					n: "..."
-					if pname/text <> none [ n: pname/text ]
+					n: pname/text
 					print [ "survey changed..." ]
-					m: writesrc n u tncs/thtml h indents/(tta/selected)
+					ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
+					m: writesrc n u tncs/thtml h indents/(tta/selected) ttags
 					viewsrc/text: m
 					v/text: (rejoin [promotionfilename " *"])
 				]
@@ -363,7 +379,7 @@ v: layout [
 				cl: area 580x220 40.40.40 font-name "consolas" font-size 10 [
 					print [ "clause changed..." ]
 					tncs/ttext/:sidx: face/text
-					tncs/thtml/:sidx: clauser tncs/thead/:sidx (split face/text newline) reduce [ indents/(tta/selected) indents/(ttb/selected) indents/(ttc/selected) indents/(ttd/selected) ]
+					tncs/thtml/:sidx: clauser tncs/thead/:sidx (split face/text newline) (reduce [ indents/(tta/selected) indents/(ttb/selected) indents/(ttc/selected) indents/(ttd/selected) ]) (reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text) ])
 					u: survey/text
 					n: "..."
 					if pname/text <> none [ n: pname/text ]
