@@ -31,16 +31,17 @@
 * an asterisk followed by a space for bullet points, eg: * Sentence begins here
 * no brackets, any of these won't be recognized: 1). (1). (1. [1]. 1]. [1.
 
-4. given the above, dash indentation won't be applied; you can't mix the two styles
-Eg: these won't work:
+4. given the above, dash indentation won't be applied; you can't mix the two styles, Eg: these won't work:
+```
 A. a section
 	1. a clause
 -- a paragraph
-
+```
+```
 A. a section
 1. a clause
 * a paragraph
-
+```
 but any of these will:
 ```
 A. a section
