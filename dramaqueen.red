@@ -29,11 +29,11 @@ Red [
 ;; TODO
 ;; [?] add html render preview
 ;; [!] fix no-show of 1st t&c article
-;; [!] fix writesrc scramble when called from tnc section list
-;; [ ] fix tnc tag replace
 ;; [ ] skip bg html if bg.png is missing, use white instead
 ;; [ ] upload generic html template, preset, bg and banner
-;; [?] choose html template (scan res dir)
+;; [!] add article html code preview
+;; [ ] move indentation lists to popmenus if possible
+;; [ ] add pre-existing indentation checks to clauser
 ;; [?] fix tab-panel size vs menu
 ;; [?] resizable ui
 ;; [?] resize limiting
@@ -41,8 +41,11 @@ Red [
 ;; [ ] optimize
 ;; [ ] redify
 ;; [ ] (maybe) automatically convert formatting of t&c text on drop
+;; [ ] (maybe) make a date picker for date fields - not important here tho
+;; [ ] (maybe) (difficult) try in-situ drag'n'drop tnc builder using draw; make it an outliner
+;; [ ] (maybe) (onerous) rip tncs directly from source pdf and docx files
 ;; [ ] (impossible?) add ftp upload tab & params
-;; [ ] (maybe) use a common markup in t&c text, probably orgmode
+;; [ ] hose everything and redesign.
 
 
 prin [ "loading source template..." ]
