@@ -29,6 +29,8 @@ Red [
 ;; TODO
 ;; [?] add html render preview
 ;; [!] fix no-show of 1st t&c article
+;; [!] fix writesrc scramble when called from tnc section list
+;; [ ] fix tnc tag replace
 ;; [ ] skip bg html if bg.png is missing, use white instead
 ;; [ ] upload generic html template, preset, bg and banner
 ;; [?] choose html template (scan res dir)
@@ -172,14 +174,18 @@ tncs: context [
 ;; promotion data =
 ;; promotion_name client_name start_date end_date site_url site_user survey_url tnc_preset
 
-pset: [ "" "" "" "" "" "" "" "blank" ]
+pset: [ "" "" "" "" "" "" "" "" "blank" ]
 
 sidx: 1
 
 prin [ "writing writesrc function..." ]
 writesrc: function [n s c ht i u] [
-	;print [ "writesrc triggered..." ]
-	;print [ "survey = " s ]
+	print [ "writesrc triggered..." ]
+	;print [ "n = " n ]
+	;print [ "s = " s ]
+	;print [ "c = " c ]
+	;print [ "i = " i ]
+	;print [ "u = " u ]
 	;probe s
 	o: copy ht
 	l: copy c
@@ -189,15 +195,16 @@ writesrc: function [n s c ht i u] [
 	either (none? s) or (s = "") [
 		replace o "[surveyurl]" ""
 	] [
-		replace o "[surveyurl]" rejoin ["<div id=^"mid-container^" align=^"center^"> ^/ ^- <iframe height=^"700^" width=^"640^" frameborder=^"0^" allowtransparency=^"true^" style=^"background: #FFFFFF;^" src=^"" s "^"></iframe>^/</div>"]
+		replace o "[surveyurl]" (rejoin ["<div id=^"mid-container^" align=^"center^"> ^/ ^- <iframe height=^"700^" width=^"640^" frameborder=^"0^" allowtransparency=^"true^" style=^"background: #FFFFFF;^" src=^"" s "^"></iframe>^/</div>"])
 	]
 	replace o "[promotiontncs]" (rejoin [i/1 "^/" (rejoin l ) i/2 "^/" g])
 
 ;; insert field text
 
+	probe u
 	repeat fx ((length? u) - 1) [
 		if fx % 2 = 1 [
-			o: replace o u/:fx u/(fx + 1)
+			unless none? u/(fx + 1) [ o: replace o u/:fx u/(fx + 1) ]
 		]
 	]
 	write %./pub/test.html o
@@ -245,13 +252,16 @@ loadtnc: func [ presetfile ] [
 			u: survey/text
 			n: "..."
 			if pname/text <> none [ n: pname/text ]
-			m: writesrc n u tncs/thtml h indents/(tncs/tind/1)
+			ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
+			m: writesrc n u tncs/thtml h indents/(tncs/tind/1) ttags
 			viewsrc/text: m
 			;probe tncs/thtml/:sidx
 		] [ print [ "^-can't find preset file: " presetfile ] ]
 	] [ print [ "^-preset file not set: " presetfile ] ]
 ]
 print [ "OK" ]
+
+hidx: 1
 
 prin [ "making the ui..." ]
 v: layout [
@@ -260,60 +270,66 @@ v: layout [
 		"Setup" [
 			below
 			sup: panel [
-				below
-				
-				text "promotion name"
-				pname: field 780x30 on-change [
-					u: survey/text
-					n: "..."
-					if pname/text <> none [ n: pname/text ]
+				text 230x30 "html template"
+				htl: drop-list 320x30 select 1 data (collect [foreach file read %./res/ [ if (parse (to-string file) ["template_" thru ".html"]) [keep (to-string file)] ]]) [
+					unless face/selected = hidx [
+						h: read (to-file rejoin [ "./res/" face/data/(face/selected) ])
+						ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
+						m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
+						viewsrc/text: m
+						v/text: (rejoin [promotionfilename " *"])
+						hidx: face/selected 
+					]
+				]
+				return
+				text 230x30 "promotion name"
+				pname: field 320x30 on-change [
 					print [ "name changed..." ]
-					m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected)
-					viewsrc/text: m
-					v/text: (rejoin [promotionfilename " *"])
-				]
-				
-				text "client name"
-				clientname: field 780x30 on-change [
 					ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
 					m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
 					viewsrc/text: m
 					v/text: (rejoin [promotionfilename " *"])
 				]
-				
-				text "promotion start (dd-mm-yyyy)"
-				starting: field 780x30 on-change [
+				return
+				text 230x30 "client name"
+				clientname: field 320x30 on-change [
 					ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
 					m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
 					viewsrc/text: m
 					v/text: (rejoin [promotionfilename " *"])
 				]
-				
-				text "promotion end (dd-mm-yyyy)"
-				ending: field 780x30 on-change [
+				return
+				text 230x30 "promotion start (dd-mm-yyyy)"
+				starting: field 320x30 on-change [
 					ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
 					m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
 					viewsrc/text: m
 					v/text: (rejoin [promotionfilename " *"])
 				]
-				
-				text "site url"
-				siteurl: field 780x30 on-change [
+				return
+				text 230x30 "promotion end (dd-mm-yyyy)"
+				ending: field 320x30 on-change [
+					ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
+					m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
+					viewsrc/text: m
 					v/text: (rejoin [promotionfilename " *"])
 				]
-				
-				text "site username"
-				siteusr: field 780x30 on-change [
+				return
+				text 230x30 "site url"
+				siteurl: field 320x30 on-change [
 					v/text: (rejoin [promotionfilename " *"])
 				]
-				
-				text "survey url"
-				survey: field 780x30 on-change [
-					u: survey/text
-					n: pname/text
+				return
+				text 230x30 "site username"
+				siteusr: field 320x30 on-change [
+					v/text: (rejoin [promotionfilename " *"])
+				]
+				return
+				text 230x30 "survey url"
+				survey: field 320x30 on-change [
 					print [ "survey changed..." ]
 					ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
-					m: writesrc n u tncs/thtml h indents/(tta/selected) ttags
+					m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
 					viewsrc/text: m
 					v/text: (rejoin [promotionfilename " *"])
 				]
@@ -361,12 +377,14 @@ v: layout [
 					ocol: sp/color
 					sidx: face/selected
 					probe sidx
-					print [ "tncs/ttext/:sidx = " tncs/ttext/:sidx ]
+					print [ "changing cl/text to : " tncs/ttext/:sidx ]
 					cl/text: tncs/ttext/:sidx
+					print [ "changed cl/text to : " cl/text ]
 					tcln/text: tncs/thead/:sidx
 					sp/color: ocol
 				]
 				pad 10x0 tcln: field 40x30 on-enter [
+					print [ "tcln changed..." ]
 					if (face/text <> "") and (face/text <> none) [
 						tncs/thead/:sidx: face/text
 						atcl/data: tncs/thead
@@ -376,16 +394,18 @@ v: layout [
 				]
 			]
 			cc: panel 590x240 [
-				cl: area 580x220 40.40.40 font-name "consolas" font-size 10 [
+				cl: area 580x220 40.40.40 font-name "consolas" font-size 10 on-change [
 					print [ "clause changed..." ]
-					tncs/ttext/:sidx: face/text
-					tncs/thtml/:sidx: clauser tncs/thead/:sidx (split face/text newline) (reduce [ indents/(tta/selected) indents/(ttb/selected) indents/(ttc/selected) indents/(ttd/selected) ]) (reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text) ])
-					u: survey/text
-					n: "..."
-					if pname/text <> none [ n: pname/text ]
-					m: writesrc n u tncs/thtml h indents/(tta/selected)
-					viewsrc/text: m
-					sp/color: 100.70.55
+					if tncs/ttext/:sidx <> face/text [
+						tncs/ttext/:sidx: face/text
+						tncs/thtml/:sidx: clauser tncs/thead/:sidx (split face/text newline) (reduce [ indents/(tta/selected) indents/(ttb/selected) indents/(ttc/selected) indents/(ttd/selected) ])
+						ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
+						m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
+						viewsrc/text: m
+						print [ "html updated." ]
+						v/text: (rejoin [promotionfilename " *"])
+						sp/color: 100.70.55
+					]
 				]
 			]
 			tt: panel 440x180 [
@@ -450,14 +470,16 @@ view/flags/options v [resize] [
 				otp [ po: request-file/title/file/filter "load promotion setup" %./res/ ["promotion" "*.pro"]
 					if not (none? po) [
 						pset: do read po
-						pname/text: pset/1
-						clientname/text: pset/2 
-						starting/text: pset/3 
-						ending/text: pset/4 
-						siteurl/text: pset/5 
-						siteusr/text: pset/6 
-						survey/text: pset/7 
-						svl/text: pset/8
+						htlidx: index? (find htl/data pset/1)
+						unless none? htlidx [ htl/selected: htlidx ]
+						pname/text: pset/2
+						clientname/text: pset/3
+						starting/text: pset/4 
+						ending/text: pset/5
+						siteurl/text: pset/6 
+						siteusr/text: pset/7 
+						survey/text: pset/8 
+						svl/text: pset/9
 						pf: to-file (rejoin ["./res/preset_" svl/text ".tnc"])
 						loadtnc pf
 						promotionfilename: (rejoin ["./res/promotion_" pname/text ".pro"])
@@ -470,9 +492,9 @@ view/flags/options v [resize] [
 				]
 				stp [
 					if (none? pname/text) or (pname/text = "") [ pname/text: "untitled" ]
-					pset: reduce [ pname/text clientname/text starting/text ending/text siteurl/text siteusr/text survey/text svl/text ]
+					pset: reduce [ htl/data/(htl/selected) pname/text clientname/text starting/text ending/text siteurl/text siteusr/text survey/text svl/text ]
 					repeat st (length? pset) [ if none? pset/:st [ pset/:st: "" ]] 
-					write to-file (rejoin ["./res/promotion_" pname/text ".pro"]) pset
+					write to-file (rejoin ["./res/promotion_" (replace (trim pname/text) " " "") ".pro"]) pset
 					promotionfilename: (rejoin ["./res/promotion_" pname/text ".pro"])
 					v/text: promotionfilename
 					sp/color: none
