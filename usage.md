@@ -3,7 +3,7 @@
 # setup:
 1. download dramaqueen.exe
 2. copy it to your campaign folder
-3, launch dramaqueen.exe
+3. launch dramaqueen.exe
 4. allow internet access if you have a firewall, it will connect to this github repository and download templates and fonts to a sub-folder called res, if they don't exist already
 
 # usage:
