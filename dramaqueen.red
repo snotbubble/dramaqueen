@@ -28,11 +28,10 @@ Red [
 
 ;; TODO
 ;; [?] (onerous - merge seperate project) add html render preview
-;; [ ] fix no-show of 1st t&c article
-;; [ ] skip bg html if bg.png is missing, use white instead
+;; [!] fix no-show of 1st t&c article
+;; [!] skip bg html if bg.png is missing, use white instead
+;; [!] allow multiple tags in tnc articles
 ;; [ ] upload generic html template, preset, bg and banner to github
-;; [?] add article html code preview
-;; [!] fix article html code corruption caused by find/replace
 ;; [ ] move indentation lists to popmenus if possible
 ;; [ ] add pre-existing indentation checks to clauser
 ;; [ ] make AUS redemption boilerplate T&Cs
@@ -56,14 +55,14 @@ Red [
 ;; [ ] hose everything and redesign.
 
 
-prin [ "loading source template..." ]
+prin "loading source template..."
 h: read %./res/template_default.html
-print [ "OK" ]
+print "OK"
 
 ;; display tile only, not used for anything else
 promotionfilename: "DramaQueen"
 
-prin [ "writing clauser function..." ]
+prin "writing clauser function..."
 clauser: function [t s m u] [
 	;print [ "clauser triggered..." ]
 	;print [ "^-clauser indentation = " m ]
@@ -168,14 +167,15 @@ clauser: function [t s m u] [
 
 		repeat fx ((length? u) - 1) [
 			if fx % 2 = 1 [
-				unless none? u/(fx + 1) [ o: replace o u/:fx u/(fx + 1) ]
+				;print [ "clauser: replacing article tag" reduce u/:fx "with" reduce u/(fx + 1) ]
+				unless none? u/(fx + 1) [ o: replace o reduce u/:fx reduce u/(fx + 1) ]
 			]
 		]
 		;print o
 		return o
 	]
 ]
-print [ "OK" ]
+print "OK"
 
 
 ;; terms and conditions data: section names, section text, section html, indentation rules
@@ -197,7 +197,7 @@ pset: [ "" "" "" "" "" "" "" "" "blank" ]
 
 sidx: 1
 
-prin [ "writing writesrc function..." ]
+prin "writing writesrc function..."
 writesrc: function [n s c ht i u] [
 	print [ "writesrc triggered..." ]
 	;print [ "n = " n ]
@@ -224,7 +224,7 @@ writesrc: function [n s c ht i u] [
 	write %./pub/test.html o
 	o
 ]
-print [ "OK" ]
+print "OK"
 
 indents: [ ["<ul>" "</ul>"] ["<ol type=^"A^">" "</ol>"] ["<ol type=^"a^">" "</ol>"]  ["<ol type=^"I^">" "</ol>"] ["<ol type=^"i^">" "</ol>"] ["<ol type=^"1^">" "</ol>"] ]
 indentlabels: [ "Bullet" "Uppercase letters" "Lowercase letters"  "Uppercase Roman" "Lowercase Roman" "Numbers" ]
@@ -241,9 +241,9 @@ fittopane: function [ii ps] [
 	]
 	ii/offset/x: (to-integer ((ps/x - ii/size/x) * 0.5))
 ]
-print [ "OK" ]
+print "OK"
 
-prin [ "writing loadtnc func..." ]
+prin "writing loadtnc func..."
 loadtnc: func [ presetfile ] [
 	print [ "loadtnc func triggered..." ]
 	either not (none? presetfile) [
@@ -273,11 +273,21 @@ loadtnc: func [ presetfile ] [
 		] [ print [ "^-can't find preset file: " presetfile ] ]
 	] [ print [ "^-preset file not set: " presetfile ] ]
 ]
-print [ "OK" ]
+print "OK"
+
+prin "writing updatehtml func"
+updatehtml: func [] [
+	ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
+	tncs/thtml/:sidx: clauser tncs/thead/:sidx (split cl/text newline) (reduce [ indents/(tta/selected) indents/(ttb/selected) indents/(ttc/selected) indents/(ttd/selected) ]) ttags
+	m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
+	viewsrc/text: m
+	clh/text: tncs/thtml/:sidx
+]
+print "OK"
 
 hidx: 1
 
-prin [ "making the ui..." ]
+prin "making the ui..."
 v: layout [
 	title promotionfilename
 	tp: tab-panel 600x400 [
@@ -307,25 +317,19 @@ v: layout [
 				return
 				text 230x30 "client name"
 				clientname: field 320x30 on-change [
-					ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
-					m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
-					viewsrc/text: m
+					updatehtml
 					v/text: (rejoin [promotionfilename " *"])
 				]
 				return
 				text 230x30 "promotion start (dd-mm-yyyy)"
 				starting: field 320x30 on-change [
-					ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
-					m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
-					viewsrc/text: m
+					updatehtml
 					v/text: (rejoin [promotionfilename " *"])
 				]
 				return
 				text 230x30 "promotion end (dd-mm-yyyy)"
 				ending: field 320x30 on-change [
-					ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
-					m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
-					viewsrc/text: m
+					updatehtml
 					v/text: (rejoin [promotionfilename " *"])
 				]
 				return
@@ -410,16 +414,9 @@ v: layout [
 				cl: area 270x220 40.40.40 font-name "consolas" font-size 10 on-change [
 					print [ "clause changed..." ]
 					print [ "^-check tncs/ttext/:sidx : " tncs/ttext/:sidx ]
-					ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
-					;tncs/ttext/:sidx: face/text ;; these are entangled, possibly a bug so uncomment if its not working later
-					tncs/thtml/:sidx: clauser tncs/thead/:sidx (split face/text newline) (reduce [ indents/(tta/selected) indents/(ttb/selected) indents/(ttc/selected) ttags indents/(ttd/selected) ])
-					m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected)
-					viewsrc/text: m
-					print [ "html updated." ]
+					updatehtml
 					;v/text: (rejoin [promotionfilename " *"])  ;; this breaks the event: triggers itself again with empty data
 					sp/color: 100.70.55
-					print [ "^-check tncs/ttext/:sidx after clauser : " tncs/ttext/:sidx ]
-					clh/text: tncs/thtml/:sidx 
 				]
 				clh: area 270x220 30.35.40 font-name "consolas" font-size 8
 			]
@@ -430,6 +427,8 @@ v: layout [
 					tncs/tind/1: face/selected
 					;sp/color: 100.70.55
 					;print [ "indent x1 tag : " indents/(face/selected) ]
+					updatehtml
+					print [ "tta: html updated." ]
 				]
 				return
 				text "indent sections with^-"
@@ -438,6 +437,8 @@ v: layout [
 					tncs/tind/2: face/selected
 					;sp/color: 100.70.55
 					;print [ "indent x2 tag : " indents/(face/selected) ]
+					updatehtml
+					print [ "ttb: html updated." ]
 				]
 				return
 				text "indent clauses with^-^-^-"
@@ -446,6 +447,8 @@ v: layout [
 					tncs/tind/3: face/selected
 					;sp/color: 100.70.55
 					;print [ "indent x3 tag : " indents/(face/selected) ]
+					updatehtml
+					print [ "ttc: html updated." ]
 				]
 				return
 				text "indent paragraphs with^-^-^-"
@@ -454,6 +457,8 @@ v: layout [
 					tncs/tind/4: face/selected
 					sp/color: 100.70.55
 					;print [ "indent x4 tag : " indents/(face/selected) ]
+					updatehtml
+					print [ "ttd: html updated." ]
 				]
 			]
 		]
@@ -469,7 +474,7 @@ v: layout [
 		]
 	]
 ]
-print [ "OK" ]
+print "OK"
 
 view/flags/options v [resize] [
 	menu: [
