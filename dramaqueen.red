@@ -27,24 +27,32 @@ Red [
 ;; - : dropped it
 
 ;; TODO
-;; [?] add html render preview
-;; [!] fix no-show of 1st t&c article
+;; [?] (onerous - merge seperate project) add html render preview
+;; [ ] fix no-show of 1st t&c article
 ;; [ ] skip bg html if bg.png is missing, use white instead
-;; [ ] upload generic html template, preset, bg and banner
-;; [!] add article html code preview
+;; [ ] upload generic html template, preset, bg and banner to github
+;; [?] add article html code preview
+;; [!] fix article html code corruption caused by find/replace
 ;; [ ] move indentation lists to popmenus if possible
 ;; [ ] add pre-existing indentation checks to clauser
+;; [ ] make AUS redemption boilerplate T&Cs
+;; [ ] make AUS competition boilerplate T&Cs
+;; [ ] make AUS bonus-offer boilerplate T&Cs
+;; [ ] make NZ redemption boilerplate T&Cs
+;; [ ] make NZ competition boilerplate T&Cs
+;; [ ] make NZ bonus-offer boilerplate T&Cs
+;; [ ] check and download templates on startup
+;; [ ] (onerous - merge separate project) add option rip tncs directly from source pdf and docx files
 ;; [?] fix tab-panel size vs menu
 ;; [?] resizable ui
 ;; [?] resize limiting
 ;; [?] redo preset ui if/when drop-down is fixed
 ;; [ ] optimize
 ;; [ ] redify
-;; [ ] (maybe) automatically convert formatting of t&c text on drop
 ;; [ ] (maybe) make a date picker for date fields - not important here tho
-;; [ ] (maybe) (difficult) try in-situ drag'n'drop tnc builder using draw; make it an outliner
-;; [ ] (maybe) (onerous) rip tncs directly from source pdf and docx files
-;; [ ] (impossible?) add ftp upload tab & params
+;; [ ] (onerus - merge saparate project) try in-situ drag'n'drop tnc builder using draw; make it an interactive outliner
+;; [ ] investigate curl vs rebol for ftp
+;; [ ] add ftp upload tab & params
 ;; [ ] hose everything and redesign.
 
 
@@ -56,7 +64,7 @@ print [ "OK" ]
 promotionfilename: "DramaQueen"
 
 prin [ "writing clauser function..." ]
-clauser: function [t s m] [
+clauser: function [t s m u] [
 	;print [ "clauser triggered..." ]
 	;print [ "^-clauser indentation = " m ]
 	;print [ "^-clauser strings = " s ]
@@ -155,6 +163,14 @@ clauser: function [t s m] [
 			append o rejoin [ pws m/:d/2 "^/" ] td: td - 1 d: d - 1 
 		]
 		append o m/2/2
+
+;; replace setup tags with field values
+
+		repeat fx ((length? u) - 1) [
+			if fx % 2 = 1 [
+				unless none? u/(fx + 1) [ o: replace o u/:fx u/(fx + 1) ]
+			]
+		]
 		;print o
 		return o
 	]
@@ -188,7 +204,6 @@ writesrc: function [n s c ht i u] [
 	;print [ "s = " s ]
 	;print [ "c = " c ]
 	;print [ "i = " i ]
-	;print [ "u = " u ]
 	;probe s
 	o: copy ht
 	l: copy c
@@ -201,10 +216,6 @@ writesrc: function [n s c ht i u] [
 		replace o "[surveyurl]" (rejoin ["<div id=^"mid-container^" align=^"center^"> ^/ ^- <iframe height=^"700^" width=^"640^" frameborder=^"0^" allowtransparency=^"true^" style=^"background: #FFFFFF;^" src=^"" s "^"></iframe>^/</div>"])
 	]
 	replace o "[promotiontncs]" (rejoin [i/1 "^/" (rejoin l ) i/2 "^/" g])
-
-;; insert field text
-
-	probe u
 	repeat fx ((length? u) - 1) [
 		if fx % 2 = 1 [
 			unless none? u/(fx + 1) [ o: replace o u/:fx u/(fx + 1) ]
@@ -379,7 +390,6 @@ v: layout [
 					print [ "section list changed..." ]
 					ocol: sp/color
 					sidx: face/selected
-					probe sidx
 					print [ "changing cl/text to : " tncs/ttext/:sidx ]
 					cl/text: tncs/ttext/:sidx
 					print [ "changed cl/text to : " cl/text ]
@@ -397,19 +407,21 @@ v: layout [
 				]
 			]
 			cc: panel 590x240 [
-				cl: area 580x220 40.40.40 font-name "consolas" font-size 10 on-change [
+				cl: area 270x220 40.40.40 font-name "consolas" font-size 10 on-change [
 					print [ "clause changed..." ]
-					if tncs/ttext/:sidx <> face/text [
-						tncs/ttext/:sidx: face/text
-						tncs/thtml/:sidx: clauser tncs/thead/:sidx (split face/text newline) (reduce [ indents/(tta/selected) indents/(ttb/selected) indents/(ttc/selected) indents/(ttd/selected) ])
-						ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
-						m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
-						viewsrc/text: m
-						print [ "html updated." ]
-						v/text: (rejoin [promotionfilename " *"])
-						sp/color: 100.70.55
-					]
+					print [ "^-check tncs/ttext/:sidx : " tncs/ttext/:sidx ]
+					ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
+					;tncs/ttext/:sidx: face/text ;; these are entangled, possibly a bug so uncomment if its not working later
+					tncs/thtml/:sidx: clauser tncs/thead/:sidx (split face/text newline) (reduce [ indents/(tta/selected) indents/(ttb/selected) indents/(ttc/selected) ttags indents/(ttd/selected) ])
+					m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected)
+					viewsrc/text: m
+					print [ "html updated." ]
+					;v/text: (rejoin [promotionfilename " *"])  ;; this breaks the event: triggers itself again with empty data
+					sp/color: 100.70.55
+					print [ "^-check tncs/ttext/:sidx after clauser : " tncs/ttext/:sidx ]
+					clh/text: tncs/thtml/:sidx 
 				]
+				clh: area 270x220 30.35.40 font-name "consolas" font-size 8
 			]
 			tt: panel 440x180 [
 				text "indent articles with"
@@ -473,6 +485,7 @@ view/flags/options v [resize] [
 				otp [ po: request-file/title/file/filter "load promotion setup" %./res/ ["promotion" "*.pro"]
 					if not (none? po) [
 						pset: do read po
+						probe pset
 						htlidx: index? (find htl/data pset/1)
 						unless none? htlidx [ htl/selected: htlidx ]
 						pname/text: pset/2
@@ -497,7 +510,7 @@ view/flags/options v [resize] [
 					if (none? pname/text) or (pname/text = "") [ pname/text: "untitled" ]
 					pset: reduce [ htl/data/(htl/selected) pname/text clientname/text starting/text ending/text siteurl/text siteusr/text survey/text svl/text ]
 					repeat st (length? pset) [ if none? pset/:st [ pset/:st: "" ]] 
-					write to-file (rejoin ["./res/promotion_" (replace (trim pname/text) " " "") ".pro"]) pset
+					write to-file (rejoin ["./res/promotion_" (replace (trim pname/text) " " "_") ".pro"]) pset
 					promotionfilename: (rejoin ["./res/promotion_" pname/text ".pro"])
 					v/text: promotionfilename
 					sp/color: none
@@ -509,7 +522,9 @@ view/flags/options v [resize] [
 			tp/size: face/size - 20x50
 			cc/size: face/size - 40x400
 			sp/size/x: face/size/x - 40
-			cl/size: face/size - 60x420
+			cl/size: face/size - ( to-pair reduce [ (to-integer ((cc/size/x * 0.5) + 60)) 420] )
+			clh/size: cl/size
+			clh/offset/x: (cl/offset/x + cl/size/x + 20)
 			tcln/size/x: face/size/x - ( tcln/offset/x + 50 )
 			tt/offset/y: face/size/y - 280
 			vsp/size: face/size - 40x110
