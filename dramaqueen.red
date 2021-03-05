@@ -27,12 +27,9 @@ Red [
 ;; - : dropped it
 
 ;; TODO
-;; [?] (onerous - merge seperate project) add html render preview
-;; [!] fix no-show of 1st t&c article
-;; [!] skip bg html if bg.png is missing, use white instead
-;; [!] allow multiple tags in tnc articles
-;; [ ] upload generic html template, preset, bg and banner to github
-;; [ ] move indentation lists to popmenus if possible
+;; [?] (onerous - merge seperate project) add html render preview... test html to draw, might not be possible
+;; [!] upload generic html template, preset, bg and banner to github
+;; [ ] move indentation lists to pop-menus if possible
 ;; [ ] add pre-existing indentation checks to clauser
 ;; [ ] make AUS redemption boilerplate T&Cs
 ;; [ ] make AUS competition boilerplate T&Cs
@@ -50,10 +47,11 @@ Red [
 ;; [ ] redify
 ;; [ ] (maybe) make a date picker for date fields - not important here tho
 ;; [ ] (onerus - merge saparate project) try in-situ drag'n'drop tnc builder using draw; make it an interactive outliner
-;; [ ] investigate curl vs rebol for ftp
+;; [!] investigate curl vs rebol for ftp
 ;; [ ] add ftp upload tab & params
 ;; [ ] hose everything and redesign.
 
+noupdate: true
 
 prin "loading source template..."
 h: read %./res/template_default.html
@@ -64,10 +62,10 @@ promotionfilename: "DramaQueen"
 
 prin "writing clauser function..."
 clauser: function [t s m u] [
-	;print [ "clauser triggered..." ]
+	prin [ "clauser..." ]
 	;print [ "^-clauser indentation = " m ]
 	;print [ "^-clauser strings = " s ]
-	;probe s
+	probe s
 
 ;; skip if empty
 
@@ -168,12 +166,13 @@ clauser: function [t s m u] [
 		repeat fx ((length? u) - 1) [
 			if fx % 2 = 1 [
 				;print [ "clauser: replacing article tag" reduce u/:fx "with" reduce u/(fx + 1) ]
-				unless none? u/(fx + 1) [ o: replace o reduce u/:fx reduce u/(fx + 1) ]
+				unless none? u/(fx + 1) [ o: replace/all o reduce u/:fx reduce u/(fx + 1) ]
 			]
 		]
 		;print o
 		return o
 	]
+	print "OK"
 ]
 print "OK"
 
@@ -199,7 +198,7 @@ sidx: 1
 
 prin "writing writesrc function..."
 writesrc: function [n s c ht i u] [
-	print [ "writesrc triggered..." ]
+	prin [ "writesrc..." ]
 	;print [ "n = " n ]
 	;print [ "s = " s ]
 	;print [ "c = " c ]
@@ -210,18 +209,25 @@ writesrc: function [n s c ht i u] [
 	g: take/last l
 	;probe l
 	replace o "[promotiontitle]" n
+	unless (exists? %./pub/images/bg.png) [
+		replace o "background:url(./images/bg.jpg) no-repeat center center fixed;background-size:cover;" ""
+	]
 	either (none? s) or (s = "") [
 		replace o "[surveyurl]" ""
 	] [
 		replace o "[surveyurl]" (rejoin ["<div id=^"mid-container^" align=^"center^"> ^/ ^- <iframe height=^"700^" width=^"640^" frameborder=^"0^" allowtransparency=^"true^" style=^"background: #FFFFFF;^" src=^"" s "^"></iframe>^/</div>"])
 	]
 	replace o "[promotiontncs]" (rejoin [i/1 "^/" (rejoin l ) i/2 "^/" g])
+
+;; replace tnc tags with setup field vals
+
 	repeat fx ((length? u) - 1) [
 		if fx % 2 = 1 [
-			unless none? u/(fx + 1) [ o: replace o u/:fx u/(fx + 1) ]
+			unless none? u/(fx + 1) [ o: replace/all o reduce u/:fx reduce u/(fx + 1) ]
 		]
 	]
 	write %./pub/test.html o
+	print "OK"
 	o
 ]
 print "OK"
@@ -248,7 +254,8 @@ loadtnc: func [ presetfile ] [
 	print [ "loadtnc func triggered..." ]
 	either not (none? presetfile) [
 		either exists? presetfile [
-			print [ "opening tncs from file..." ]
+			prin [ "opening tncs from file..." ]
+			noupdate: true
 			clear tncs/thead
 			clear tncs/ttext
 			clear tncs/thtml
@@ -258,30 +265,39 @@ loadtnc: func [ presetfile ] [
 			ttc/selected: tncs/tind/3
 			ttd/selected: tncs/tind/4
 			parse (to-string presetfile) [thru "preset_" copy pxn to "." ]
-			sidx: atcl/selected 
+			sidx: 1
 			atcl/data: tncs/thead
 			svl/text: pxn
-			atcl/selected: sidx
-			cl/text: (tncs/ttext/:sidx)
+			atcl/selected: 1
+			tcln/text: tncs/thead/1
+			cl/text: tncs/ttext/1
 			u: survey/text
 			n: "..."
 			if pname/text <> none [ n: pname/text ]
 			ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
 			m: writesrc n u tncs/thtml h indents/(tncs/tind/1) ttags
 			viewsrc/text: m
-			;probe tncs/thtml/:sidx
+			noupdate: false
+			print "OK"
 		] [ print [ "^-can't find preset file: " presetfile ] ]
 	] [ print [ "^-preset file not set: " presetfile ] ]
 ]
 print "OK"
 
-prin "writing updatehtml func"
-updatehtml: func [] [
-	ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
-	tncs/thtml/:sidx: clauser tncs/thead/:sidx (split cl/text newline) (reduce [ indents/(tta/selected) indents/(ttb/selected) indents/(ttc/selected) indents/(ttd/selected) ]) ttags
-	m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
-	viewsrc/text: m
-	clh/text: tncs/thtml/:sidx
+prin "writing updatehtml func..."
+updatehtml: func [t] [
+	prin "updatehtml..."
+	if (t <> none) [
+		print [ "^-changed text is: " t ]
+		ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
+		repeat th (length? tncs/thtml) [
+			tncs/thtml/:th: clauser tncs/thead/:th (split tncs/ttext/:th newline) (reduce [ indents/(tta/selected) indents/(ttb/selected) indents/(ttc/selected) indents/(ttd/selected) ]) ttags
+		]
+		m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
+		viewsrc/text: m
+		clh/text: tncs/thtml/:sidx
+	]
+	print "OK"
 ]
 print "OK"
 
@@ -297,39 +313,43 @@ v: layout [
 				text 230x30 "html template"
 				htl: drop-list 320x30 select 1 data (collect [foreach file read %./res/ [ if (parse (to-string file) ["template_" thru ".html"]) [keep (to-string file)] ]]) [
 					unless face/selected = hidx [
+						prin "loading html template..."
 						h: read (to-file rejoin [ "./res/" face/data/(face/selected) ])
 						ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
 						m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
 						viewsrc/text: m
 						v/text: (rejoin [promotionfilename " *"])
-						hidx: face/selected 
+						hidx: face/selected
+						print "OK" 
 					]
 				]
 				return
 				text 230x30 "promotion name"
 				pname: field 320x30 on-change [
 					print [ "name changed..." ]
-					ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
-					m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
-					viewsrc/text: m
-					v/text: (rejoin [promotionfilename " *"])
+					if (face/text <> "") and (face/text <> none) [
+						ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
+						m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
+						viewsrc/text: m
+						v/text: (rejoin [promotionfilename " *"])
+					]
 				]
 				return
 				text 230x30 "client name"
 				clientname: field 320x30 on-change [
-					updatehtml
+					unless noupdate [ updatehtml face/text ]
 					v/text: (rejoin [promotionfilename " *"])
 				]
 				return
 				text 230x30 "promotion start (dd-mm-yyyy)"
 				starting: field 320x30 on-change [
-					updatehtml
+					unless noupdate [ updatehtml face/text ]
 					v/text: (rejoin [promotionfilename " *"])
 				]
 				return
 				text 230x30 "promotion end (dd-mm-yyyy)"
 				ending: field 320x30 on-change [
-					updatehtml
+					unless noupdate [ updatehtml face/text ]
 					v/text: (rejoin [promotionfilename " *"])
 				]
 				return
@@ -345,10 +365,7 @@ v: layout [
 				return
 				text 230x30 "survey url"
 				survey: field 320x30 on-change [
-					print [ "survey changed..." ]
-					ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
-					m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
-					viewsrc/text: m
+					unless noupdate [ updatehtml face/text ]
 					v/text: (rejoin [promotionfilename " *"])
 				]
 			]
@@ -391,7 +408,8 @@ v: layout [
 				return
 				text 80x30 "section"
 				atcl: drop-list 400x30 select 1 data tncs/thead [
-					print [ "section list changed..." ]
+					prin "section list changed..."
+					noupdate: true
 					ocol: sp/color
 					sidx: face/selected
 					print [ "changing cl/text to : " tncs/ttext/:sidx ]
@@ -399,24 +417,37 @@ v: layout [
 					print [ "changed cl/text to : " cl/text ]
 					tcln/text: tncs/thead/:sidx
 					sp/color: ocol
+					noupdate: false
+					print "OK"
 				]
-				pad 10x0 tcln: field 40x30 on-enter [
+				pad 10x0 tcln: field 40x30 with [ text: tncs/thead/1 ] on-enter [
 					print [ "tcln changed..." ]
 					if (face/text <> "") and (face/text <> none) [
+						noupdate: true
 						tncs/thead/:sidx: face/text
 						atcl/data: tncs/thead
 						atcl/selected: sidx
 						sp/color: 100.70.55
+						noupdate: false
 					]
 				]
 			]
 			cc: panel 590x240 [
-				cl: area 270x220 40.40.40 font-name "consolas" font-size 10 on-change [
-					print [ "clause changed..." ]
-					print [ "^-check tncs/ttext/:sidx : " tncs/ttext/:sidx ]
-					updatehtml
-					;v/text: (rejoin [promotionfilename " *"])  ;; this breaks the event: triggers itself again with empty data
-					sp/color: 100.70.55
+				cl: area 270x220 40.40.40 font-name "consolas" font-size 10 with [ text: tncs/ttext/1 ] on-change [
+					prin [ "clause changed..." ]
+					either (face/text <> none) and (face/text <> "") [
+						noupdate: false
+						ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
+						tncs/thtml/:sidx: clauser tncs/thead/:sidx (split face/text newline) (reduce [ indents/(tta/selected) indents/(ttb/selected) indents/(ttc/selected) indents/(ttd/selected) ]) ttags
+						m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags
+						viewsrc/text: m
+						clh/text: tncs/thtml/:sidx
+						;v/text: (rejoin [promotionfilename " *"])  ;; this breaks the event: triggers itself again with empty data
+						sp/color: 100.70.55
+					] [
+						clh/text: ""
+					]
+					print "OK"
 				]
 				clh: area 270x220 30.35.40 font-name "consolas" font-size 8
 			]
@@ -427,7 +458,7 @@ v: layout [
 					tncs/tind/1: face/selected
 					;sp/color: 100.70.55
 					;print [ "indent x1 tag : " indents/(face/selected) ]
-					updatehtml
+					unless noupdate [updatehtml face/text]
 					print [ "tta: html updated." ]
 				]
 				return
@@ -437,7 +468,7 @@ v: layout [
 					tncs/tind/2: face/selected
 					;sp/color: 100.70.55
 					;print [ "indent x2 tag : " indents/(face/selected) ]
-					updatehtml
+					unless noupdate [updatehtml face/text]
 					print [ "ttb: html updated." ]
 				]
 				return
@@ -447,7 +478,7 @@ v: layout [
 					tncs/tind/3: face/selected
 					;sp/color: 100.70.55
 					;print [ "indent x3 tag : " indents/(face/selected) ]
-					updatehtml
+					unless noupdate [updatehtml face/text]
 					print [ "ttc: html updated." ]
 				]
 				return
@@ -457,7 +488,7 @@ v: layout [
 					tncs/tind/4: face/selected
 					sp/color: 100.70.55
 					;print [ "indent x4 tag : " indents/(face/selected) ]
-					updatehtml
+					unless noupdate [updatehtml face/text]
 					print [ "ttd: html updated." ]
 				]
 			]
@@ -489,6 +520,7 @@ view/flags/options v [resize] [
 			switch event/picked [
 				otp [ po: request-file/title/file/filter "load promotion setup" %./res/ ["promotion" "*.pro"]
 					if not (none? po) [
+						noupdate: true
 						pset: do read po
 						probe pset
 						htlidx: index? (find htl/data pset/1)
@@ -503,12 +535,15 @@ view/flags/options v [resize] [
 						svl/text: pset/9
 						pf: to-file (rejoin ["./res/preset_" svl/text ".tnc"])
 						loadtnc pf
+						noupdate: true
 						promotionfilename: (rejoin ["./res/promotion_" pname/text ".pro"])
 						v/text: promotionfilename
 						if exists? %./pub/images/banner.png  [
 							bi/image: load %./pub/images/banner.png
+							fittopane bi (bp/size - 0x30)
 						]
 						sp/color: none
+						noupdate: false
 					]
 				]
 				stp [
