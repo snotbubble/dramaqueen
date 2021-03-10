@@ -2,6 +2,13 @@ REBOL [
 	Title: dq_upload
 ]
 
+;; made for dramaqueen site generator
+;; for unsecure ftp (classic australian security), 
+;; sftp will probably be done separately in c or something.
+;; pwd uses a simple substitution cipher while in transit from red to rebol, 
+;; to prevent it from showing up somewhere else (like in ps for example).
+;; dont yet know if red or rebol logs it though.
+
 nargs: do system/script/args
 probe nargs
 
@@ -29,15 +36,10 @@ write/append log rejoin [ "local wotf font to upload : " lwtf "^/" ]
 write/append log rejoin [ "local banner to upload... : " lban "^/" ]
 write/append log rejoin [ "local bg image to upload. : " lbkg "^/^/" ]
 
-probe lban
-
 ph: mold checksum/secure rejoin [ to-string site to-string sdir ]
 rw: copy []
 repeat x (length? fphs) [ append rw to-char ((to-integer fphs/:x) - (to-integer ph/:x)) ]
 pass: to-string rejoin rw
-;ptest: replace/all ptest " " ""
-;print [ "reconstructed string = " ptest ]
-;probe ptest
 
 parse site [ thru "www." copy dom to end ]
 
