@@ -31,24 +31,26 @@ Red [
 ;; [!] upload generic html template, preset, bg and banner to github
 ;; [ ] move indentation lists to pop-menus if possible
 ;; [ ] add pre-existing indentation checks to clauser
-;; [ ] make AUS redemption boilerplate T&Cs
-;; [ ] make AUS competition boilerplate T&Cs
-;; [ ] make AUS bonus-offer boilerplate T&Cs
-;; [ ] make NZ redemption boilerplate T&Cs
-;; [ ] make NZ competition boilerplate T&Cs
-;; [ ] make NZ bonus-offer boilerplate T&Cs
+;; [!] make AUS redemption boilerplate T&Cs
+;; [!] make AUS competition boilerplate T&Cs
+;; [!] make AUS bonus-offer boilerplate T&Cs
+;; [!] make NZ redemption boilerplate T&Cs
+;; [!] make NZ competition boilerplate T&Cs
+;; [!] make NZ bonus-offer boilerplate T&Cs
 ;; [ ] check and download templates on startup
 ;; [ ] (onerous - merge separate project) add option rip tncs directly from source pdf and docx files
+;; [!] add menu option to show/hide eval buttons, set to hidden by default
+;; [?] fix accumulation in embedded red & rebol console output
 ;; [?] fix tab-panel size vs menu
 ;; [?] resizable ui
 ;; [?] resize limiting
 ;; [?] redo preset ui if/when drop-down is fixed
+;; [ ] icons
+;; [ ] (maybe) help menu item spawns help window with usage.md
 ;; [ ] optimize
 ;; [ ] redify
-;; [ ] (maybe) make a date picker for date fields - not important here tho
-;; [ ] (onerus - merge saparate project) try in-situ drag'n'drop tnc builder using draw; make it an interactive outliner
-;; [!] investigate curl vs rebol for ftp
-;; [ ] add ftp upload tab & params
+;; [ ] remove console spammage
+;; [ ] compile & test on other machines
 ;; [ ] hose everything and redesign.
 
 noupdate: true
@@ -65,7 +67,7 @@ clauser: function [t s m u] [
 	prin [ "clauser..." ]
 	;print [ "^-clauser indentation = " m ]
 	;print [ "^-clauser strings = " s ]
-	probe s
+	;probe s
 
 ;; skip if empty
 
@@ -192,7 +194,7 @@ tncs: context [
 ;; promotion data =
 ;; promotion_name client_name start_date end_date site_url site_user survey_url tnc_preset
 
-pset: [ "" "" "" "" "" "" "" "" "blank" ]
+pset: [ "" "" "" "" "" "" "" "" "" "blank" ]
 
 sidx: 1
 
@@ -306,7 +308,7 @@ hidx: 1
 prin "making the ui..."
 v: layout [
 	title promotionfilename
-	tp: tab-panel 600x400 [
+	tp: tab-panel 800x800 [
 		"Setup" [
 			below
 			sup: panel [
@@ -353,8 +355,13 @@ v: layout [
 					v/text: (rejoin [promotionfilename " *"])
 				]
 				return
-				text 230x30 "site url"
+				text 230x30 "site url (http://www.sitedomain.com)"
 				siteurl: field 320x30 on-change [
+					v/text: (rejoin [promotionfilename " *"])
+				]
+				return
+				text 230x30 "campaign directory name"
+				sitedir: field 320x30 on-change [
 					v/text: (rejoin [promotionfilename " *"])
 				]
 				return
@@ -432,8 +439,9 @@ v: layout [
 					]
 				]
 			]
-			cc: panel 590x240 [
-				cl: area 270x220 40.40.40 font-name "consolas" font-size 10 with [ text: tncs/ttext/1 ] on-change [
+			across
+			cc: panel 280x240 [
+				cl: area 270x220 40.40.40 font-name "consolas" font-size 10 font-color 255.255.180 with [ text: tncs/ttext/1 ] on-change [
 					prin [ "clause changed..." ]
 					either (face/text <> none) and (face/text <> "") [
 						noupdate: false
@@ -449,9 +457,11 @@ v: layout [
 					]
 					print "OK"
 				]
-				clh: area 270x220 30.35.40 font-name "consolas" font-size 8
 			]
-			tt: panel 440x180 [
+			tt: panel 400x300 [
+				below
+				text "html preview"
+				clh: area 270x220 30.35.40 font-name "consolas" font-size 8 font-color 80.255.80
 				text "indent articles with"
 				tta: drop-list 180x30 select 6 data indentlabels [ 
 					face/text: pick face/data face/selected
@@ -461,8 +471,7 @@ v: layout [
 					unless noupdate [updatehtml face/text]
 					print [ "tta: html updated." ]
 				]
-				return
-				text "indent sections with^-"
+				text "indent sections with"
 				ttb: drop-list 180x30 select 2 data indentlabels [
 					face/text: pick face/data face/selected
 					tncs/tind/2: face/selected
@@ -471,8 +480,7 @@ v: layout [
 					unless noupdate [updatehtml face/text]
 					print [ "ttb: html updated." ]
 				]
-				return
-				text "indent clauses with^-^-^-"
+				text "indent clauses with"
 				ttc: drop-list 180x30 select 5 data indentlabels [
 					face/text: pick face/data face/selected
 					tncs/tind/3: face/selected
@@ -481,8 +489,7 @@ v: layout [
 					unless noupdate [updatehtml face/text]
 					print [ "ttc: html updated." ]
 				]
-				return
-				text "indent paragraphs with^-^-^-"
+				text "indent paragraphs with"
 				ttd: drop-list 180x30 select 1 data indentlabels [
 					face/text: pick face/data face/selected
 					tncs/tind/4: face/selected
@@ -499,9 +506,64 @@ v: layout [
 			]
 		]
 		"Upload" [
-
-;; no ftp for Red, so make a bash cmd here and run it
-
+			below
+			uu: panel 590x50 [
+				button 200x30 "check rebol bridge" [
+					either (siteurl/text <> "") and (siteurl/text <> none) and (siteusr/text <> "") and (siteusr/text <> none) and (sitedir/text <> "") and (sitedir/text <> none) [
+						kh: copy []
+						kw: copy []
+						ph: mold checksum rejoin [ siteurl/text sitedir/text ] 'sha1
+						repeat x (length? woh/text) [ append kw ((to-integer ph/:x) + (to-integer woh/text/:x)) ]
+						probe rejoin ["./rebol upload.r [ " siteurl/text " " sitedir/text " " siteusr/text " [" kw "] %./index.html %./pub/fonts/font.ttf %./pub/fonts/font.wotf %./pub/images/banner.png %./pub/images/bg.png]"]
+						huh: ""
+						call/wait/output rejoin ["./rebol upload.r [ " siteurl/text " " sitedir/text " " siteusr/text " [" kw "] %./index.html %./pub/fonts/font.ttf %./pub/fonts/font.wotf %./pub/images/banner.png %./pub/images/bg.png]"] huh
+						parse huh [remove thru "(none)" ]
+						co/text: huh
+						either exists? %./log.txt [ lo/text: read %./log.txt ] [ lo/text: "upload script failed" ]
+					] [
+						lo/text: "setup not completed yet..."
+						co/text: ""
+					]
+				]
+				pad 10x0 text "password"
+				woh: field 120x30 with [flags: 'password]
+				pad 10x0 button 80x30 "clear" [ woh/text: none ]
+			]
+			oo: panel 590x240 [ 
+				lol: text "console"
+				col: text "output"
+				return
+				lo: area 270x220 40.40.40 font-name "consolas" font-size 10 font-color 255.120.50 bold
+				co: area 270x220 30.35.40 font-name "consolas" font-size 10 font-color 80.180.255 bold
+			]
+			ff: panel 590x50 [
+				button 120x30 "eval REBOL" [
+					rebo: copy ""
+					co/text: ""
+					co/font/color: 80.180.255
+					rebs: rejoin [ "REBOL [ ]^/" lo/text ]
+					;print rebs
+					write %./res/temp.r rebs
+					;print rejoin ["./rebol ./res/temp.r" ]
+					call/wait/output rejoin ["./rebol ./res/temp.r" ] rebo
+					delete %./res/temp.r
+					parse rebo [remove thru {(none)^/} ]
+					co/text: rebo
+				]
+				button 120x30 "eval RED" [
+					redo: copy ""
+					co/text: ""
+					co/font/color: 255.80.80
+					reds: rejoin [ {Red [ ] ^/} lo/text ]
+					;print reds
+					write %./res/temp.red reds
+					;print rejoin ["./red-latest ./res/temp.red" ]
+					call/wait/output rejoin ["./red-latest ./res/temp.red" ] redo
+					delete %./res/temp.red
+					co/text: redo
+				]
+				button 120x30 "clear output" [ co/text: "" ]
+			]
 		]
 	]
 ]
@@ -529,10 +591,11 @@ view/flags/options v [resize] [
 						clientname/text: pset/3
 						starting/text: pset/4 
 						ending/text: pset/5
-						siteurl/text: pset/6 
-						siteusr/text: pset/7 
-						survey/text: pset/8 
-						svl/text: pset/9
+						siteurl/text: pset/6
+						sitedir/text: pset/7
+						siteusr/text: pset/8 
+						survey/text: pset/9
+						svl/text: pset/10
 						pf: to-file (rejoin ["./res/preset_" svl/text ".tnc"])
 						loadtnc pf
 						noupdate: true
@@ -548,7 +611,7 @@ view/flags/options v [resize] [
 				]
 				stp [
 					if (none? pname/text) or (pname/text = "") [ pname/text: "untitled" ]
-					pset: reduce [ htl/data/(htl/selected) pname/text clientname/text starting/text ending/text siteurl/text siteusr/text survey/text svl/text ]
+					pset: reduce [ htl/data/(htl/selected) pname/text clientname/text starting/text ending/text siteurl/text sitedir/text siteusr/text survey/text svl/text ]
 					repeat st (length? pset) [ if none? pset/:st [ pset/:st: "" ]] 
 					write to-file (rejoin ["./res/promotion_" (replace (trim pname/text) " " "_") ".pro"]) pset
 					promotionfilename: (rejoin ["./res/promotion_" pname/text ".pro"])
@@ -559,17 +622,26 @@ view/flags/options v [resize] [
 		]
 		on-resizing: function [face event][
 			;face/size/x: min (max face/size/x 1024) 610
-			tp/size: face/size - 20x50
-			cc/size: face/size - 40x400
+			tp/size: face/size - 20x45
+			cc/size: face/size - ( to-pair reduce [ (tt/size/x + 30) (sp/offset/y + sp/size/y + 90)] )
+			tt/size/y: cc/size/y
+			tt/offset/x: face/size/x - (tt/size/x + 20)
+			oo/size: face/size - 40x240
+			uu/size/x: oo/size/x
+			ff/size/x: oo/size/x
+			ff/offset/y: face/size/y - 160
 			sp/size/x: face/size/x - 40
-			cl/size: face/size - ( to-pair reduce [ (to-integer ((cc/size/x * 0.5) + 60)) 420] )
-			clh/size: cl/size
-			clh/offset/x: (cl/offset/x + cl/size/x + 20)
+			cl/size: cc/size - 20x20
+			clh/size/x: tt/size/x - 20
 			tcln/size/x: face/size/x - ( tcln/offset/x + 50 )
-			tt/offset/y: face/size/y - 280
 			vsp/size: face/size - 40x110
 			viewsrc/size: face/size - 60x130
 			sup/size: face/size - 40x110
+			lo/size: face/size - ( to-pair reduce [ (to-integer ((oo/size/x * 0.5) + 60)) 240] )
+			co/size: lo/size
+			co/offset/x: (lo/offset/x + lo/size/x + 20)
+			lol/offset/x: lo/offset/x
+			col/offset/x: co/offset/x
 			bp/size: face/size - 40x140
             fittopane bi (bp/size - 0x30)
         ]
