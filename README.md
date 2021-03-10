@@ -4,8 +4,6 @@ campaign site generator
 # todo
 - [ ] handle existing t&c indentation formatting from pasted text
 - [ ] fix resize issues
-- [ ] ftp section
-- [ ] clean up t&c ui
 - [ ] upload template & preset files here
 - [ ] program to use templates & make dirs if they don't exist
 - [ ] investigate html preview
@@ -13,4 +11,5 @@ campaign site generator
 - [ ] optimize
 - [ ] update ui if drop-down is fixed
 
-![screenie](./dramaqueen_screenie_210305.png)
+![screenie](./dramaqueen_tnc_screenie_210311.png)
+![screenie](./dramaqueen_ftp_screenie_210311.png)
