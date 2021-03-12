@@ -28,29 +28,22 @@ Red [
 
 ;; TODO
 ;; [?] (onerous - merge seperate project) add html render preview... test html to draw, might not be possible
-;; [!] upload generic html template, preset, bg and banner to github
-;; [ ] move indentation lists to pop-menus if possible
-;; [ ] add pre-existing indentation checks to clauser
-;; [!] make AUS redemption boilerplate T&Cs
-;; [!] make AUS competition boilerplate T&Cs
-;; [!] make AUS bonus-offer boilerplate T&Cs
-;; [!] make NZ redemption boilerplate T&Cs
-;; [!] make NZ competition boilerplate T&Cs
-;; [!] make NZ bonus-offer boilerplate T&Cs
-;; [ ] check and download templates on startup
 ;; [ ] (onerous - merge separate project) add option rip tncs directly from source pdf and docx files
-;; [!] add menu option to show/hide eval buttons, set to hidden by default
-;; [?] fix tab-panel size vs menu
+;; [!] generate base templates
+;; [!] make AUS redemption T&Cs
+;; [!] make AUS competition T&Cs
+;; [!] make AUS bonus-offer T&Cs
+;; [!] make NZ redemption T&Cs
+;; [!] make NZ competition T&Cs
+;; [!] make NZ bonus-offer T&Cs
+;; [!] remove red eval button - Red writes to home dir on linux, who-knows where on windows
 ;; [?] resizable ui
 ;; [?] resize limiting
-;; [?] redo preset ui if/when drop-down is fixed
 ;; [ ] icons
-;; [ ] (maybe) help menu item spawns help window with usage.md
 ;; [ ] optimize
 ;; [ ] redify
-;; [ ] remove console spammage
+;; [ ] remove console spammage - send to dqlog.txt instead
 ;; [ ] compile & test on other machines
-;; [ ] hose everything and redesign.
 
 noupdate: true
 
