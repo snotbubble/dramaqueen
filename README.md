@@ -2,7 +2,7 @@
 campaign site generator
 
 # todo
-- [!] generate base templates
+- [ ] generate base templates
 - [ ] make AUS redemption T&Cs
 - [ ] make AUS competition T&Cs
 - [ ] make AUS bonus-offer T&Cs
