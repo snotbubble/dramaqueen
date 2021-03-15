@@ -2,14 +2,7 @@
 campaign site generator
 
 # todo
-- [ ] generate base templates
-- [ ] make AUS redemption T&Cs
-- [ ] make AUS competition T&Cs
-- [ ] make AUS bonus-offer T&Cs
-- [ ] make NZ redemption T&Cs
-- [ ] make NZ competition T&Cs
-- [ ] make NZ bonus-offer T&Cs
-- [ ] remove red eval button - Red writes to home dir on linux, who-knows where on windows
+- [ ] wait for clearance before next update
 - [ ] resizable ui (GTK issues)
 - [ ] resize limiting (GTK issues)
 - [ ] icons
