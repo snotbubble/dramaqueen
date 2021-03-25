@@ -44,7 +44,7 @@ pass: to-string rejoin rw
 parse site [ thru "www." copy dom to end ]
 
 write/append log rejoin [ "checking site: " site "/index.html^/" ]
-either exists? (to-url rejoin [ site "/index.html" ]) [
+either (exists? (to-url rejoin [ site "/index.html" ])) or (exists? (to-url rejoin [ site "/index.html" ])) [
 	either (pass <> none) and (pass <> "") [
 
 		write/append log rejoin [ "^-making site dir: " site "/" sdir "/" "^/" ]

@@ -27,6 +27,7 @@ Red [
 ;; - : dropped it
 
 ;; TODO
+;; [!] investigate stalled ftp make-dir (upload.r)
 ;; [?] (onerous - merge seperate project) add html render preview... test html to draw, might not be possible
 ;; [ ] (onerous - merge separate project) add option rip tncs directly from source pdf and docx files
 ;; [!] generate base templates
@@ -663,17 +664,24 @@ v: layout [
 				button 200x30 "upload" [
 					either (siteurl/text <> "") and (siteurl/text <> none) and (siteusr/text <> "") and (siteusr/text <> none) and (sitedir/text <> "") and (sitedir/text <> none) [
 						call/wait "cp ./pub/test.html ./pub/index.html"
-						either (exists? %./pub/fonts/font.ttf) and (exists? %./pub/fonts/font.wotf) [
+						either (exists? %./pub/fonts/font.ttf) and (exists? %./pub/fonts/font.otf) [
 							kh: copy []
 							kw: copy []
 							ph: mold checksum rejoin [ siteurl/text sitedir/text ] 'sha1
 							repeat x (length? woh/text) [ append kw ((to-integer ph/:x) + (to-integer woh/text/:x)) ]
-							probe rejoin ["./rebol upload.r [ " siteurl/text " " sitedir/text " " siteusr/text " [" kw "] %./pub/index.html %./pub/fonts/font.ttf %./pub/fonts/font.wotf %./pub/images/banner.png %./pub/images/bg.png]"]
+							probe rejoin ["./rebol upload.r [ " siteurl/text " " sitedir/text " " siteusr/text " [" kw "] %./pub/index.html %./pub/fonts/font.ttf %./pub/fonts/font.otf %./pub/images/banner.png %./pub/images/bg.png]"]
 							huh: ""
-							call/wait/output rejoin ["./rebol upload.r [ " siteurl/text " " sitedir/text " " siteusr/text " [" kw "] %./pub/index.html %./pub/fonts/font.ttf %./pub/fonts/font.wotf %./pub/images/banner.png %./pub/images/bg.png]"] huh
+							call/wait/output rejoin ["./rebol upload.r [ " siteurl/text " " sitedir/text " " siteusr/text " [" kw "] %./pub/index.html %./pub/fonts/font.ttf %./pub/fonts/font.otf %./pub/images/banner.png %./pub/images/bg.png]"] huh
 							parse huh [remove thru "(none)" ]
 							co/text: huh
-							either exists? %./log.txt [ lo/text: read %./log.txt ] [ lo/text: "upload script failed" ]
+							either exists? %./log.txt [ 
+								lo/text: read %./log.txt
+;; wait for australian innernet...
+								wait 5
+								lo/text: read %./log.txt
+								wait 5
+								lo/text: read %./log.txt
+							] [ lo/text: "upload script failed" ]
 						] [
 							lo/text: "aborted: fonts are missing..."
 						]
