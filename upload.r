@@ -48,33 +48,33 @@ either exists? (to-url rejoin [ site "/index.html" ]) [
 	either (pass <> none) and (pass <> "") [
 
 		write/append log rejoin [ "^-making site dir: " site "/" sdir "/" "^/" ]
-		;make-dir (to-url rejoin [ "ftp://" fusr ":" pass "@ftp." dom "/" sdir "/" ])
+		make-dir (to-url rejoin [ "ftp://" fusr ":" pass "@ftp." dom "/" sdir "/" ])
 		
 		write/append log rejoin [ "^-making site dir: " site "/" sdir "/fonts/" "^/" ]
-		;make-dir (to-url rejoin [ "ftp://" fusr ":" pass "@ftp." dom "/" sdir "/fonts/" ])
+		make-dir (to-url rejoin [ "ftp://" fusr ":" pass "@ftp." dom "/" sdir "/fonts/" ])
 		
 		write/append log rejoin [ "^-making site dir: " site "/" sdir "/images/" "^/" ]
-		;make-dir (to-url rejoin [ "ftp://" fusr ":" pass "@ftp." dom "/" sdir "/images/" ])
+		make-dir (to-url rejoin [ "ftp://" fusr ":" pass "@ftp." dom "/" sdir "/images/" ])
 		
 		write/append log rejoin [ "copying index to: " site "/" sdir "/index.html" "^/" ]
-		;write/binary (to-url rejoin ["ftp://" fusr ":" pass "@ftp." dom "/" sdir "/index.html"]) read/binary lidx
+		write/binary (to-url rejoin ["ftp://" fusr ":" pass "@ftp." dom "/" sdir "/index.html"]) read/binary lidx
 		
 		write/append log rejoin [ "copying ttf font to: " site "/" sdir "/fonts/ from " lttf "^/" ]
-		;write/binary (to-url rejoin ["ftp://" fusr ":" pass "@ftp." dom "/" sdir "/fonts/font.ttf"]) read/binary lttf
+		write/binary (to-url rejoin ["ftp://" fusr ":" pass "@ftp." dom "/" sdir "/fonts/font.ttf"]) read/binary lttf
 		
 		write/append log rejoin [ "copying wotf font to: " site "/" sdir "/fonts/ from " lwtf "^/" ]
-		;write/binary (to-url rejoin ["ftp://" fusr ":" pass "@ftp." dom "/" sdir "/fonts/font.wotf"]) read/binary lwtf
+		write/binary (to-url rejoin ["ftp://" fusr ":" pass "@ftp." dom "/" sdir "/fonts/font.wotf"]) read/binary lwtf
 		
 		write/append log rejoin compose [ "does the banner exist? :" (exists? lban) "^/" ]
 		if exists? lban [
 			write/append log rejoin [ "^-copying banner to: " site "/" sdir "/images/ from " lban "^/" ]
-			;write/binary (to-url rejoin ["ftp://" fusr ":" pass "@ftp." dom "/" sdir "/images/banner.png"]) read/binary lban 
+			write/binary (to-url rejoin ["ftp://" fusr ":" pass "@ftp." dom "/" sdir "/images/banner.png"]) read/binary lban 
 		]
 		
 		write/append log rejoin compose [ "does the bg image exist? :" (exists? lbkg) "^/" ]
 		if exists? lbkg [
 			write/append log rejoin [ "^-copying bg image to: " site "/" sdir "/images/ from " lbkg "^/" ]
-			;write/binary (to-url rejoin [ "ftp://" fusr ":" pass "@ftp." dom "/" sdir "/images/bg.png" ]) read/binary lbkg 
+			write/binary (to-url rejoin [ "ftp://" fusr ":" pass "@ftp." dom "/" sdir "/images/bg.png" ]) read/binary lbkg 
 		]
 	] [
 		write/append log rejoin [ "invalid password for user: " fusr "^/" ] 
