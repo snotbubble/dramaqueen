@@ -56,12 +56,25 @@ prin "loading or making default html template..."
 either exists? %./res/template_default.html [
 	h: read %./res/template_default.html
 ] [
-	bx: {PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KCQo8aGVhZD4KPHRpdGxlPltjbGllbnRuYW1lXTwvdGl0bGU+CjxtZXRhIGNoYXJzZXQ9InV0Zi04Ij4KPG1ldGEgbmFtZSA9ICJmb3JtYXQtZGV0ZWN0aW9uIiBjb250ZW50ID0gInRlbGVwaG9uZT1ubyIvPgo8bWV0YSBuYW1lID0gInZpZXdwb3J0IiBjb250ZW50ID0gIndpZHRoID0gZGV2aWNlLXdpZHRoLCBpbml0aWFsLXNjYWxlID0gMS4wIi8+IAo8L2hlYWQ+Cgo8IS0tIGJhbm5lciBhbmQgc3VydmV5IG92ZXIgYSBiZyBpbWFnZSwgdG5jcyBhcmUgaW4gYSBjc3MgcG9wdXAgYm94IC0tPgoKPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCQoJQGZvbnQtZmFjZSB7CgkJZm9udC1mYW1pbHk6IGZudDsKCQlmb250LXNpemU6IDE0cHQ7CgkJc3JjOiB1cmwoLi9mb250cy9mb250Lm90Zik7CgkJc3JjOiB1cmwoLi9mb250cy9mb250LnR0Zik7Cgl9CgkKCS5vdmVybGF5IHsKCQlwb3NpdGlvbjogZml4ZWQ7CgkJdG9wOiAwOwoJCWJvdHRvbTogMDsKCQlsZWZ0OiAwOwoJCXJpZ2h0OiAwOwoJCWJhY2tncm91bmQ6IHJnYmEoMCwgMCwgMCwgMC43KTsKCQl0cmFuc2l0aW9uOiBvcGFjaXR5IDUwMG1zOwoJCXZpc2liaWxpdHk6IGhpZGRlbjsKCQlvcGFjaXR5OiAwOwoJfQoJCgkub3ZlcmxheTp0YXJnZXQgewoJCXZpc2liaWxpdHk6IHZpc2libGU7CgkJb3BhY2l0eTogMTsKCX0KCgkucG9wdXAgewoJCXRvcDogNTAlOwoJCWxlZnQ6IDUwJTsKCQl0cmFuc2Zvcm06IHRyYW5zbGF0ZSgtNTAlLCAtNTAlKTsKCQloZWlnaHQ6IDgwJTsKCQlwYWRkaW5nOiAyMHB4OwoJCWJhY2tncm91bmQ6ICNmZmY7CgkJYm9yZGVyLXJhZGl1czogNXB4OwoJCXdpZHRoOiA1MCU7CgkJcG9zaXRpb246IGZpeGVkOwoJCXRyYW5zaXRpb246IGFsbCA1cyBlYXNlLWluLW91dDsKCQlmb250LWZhbWlseTogZm50OwoJCWZvbnQtc2l6ZTogMTBwdDsKCQlmb250LXdlaWdodDogbm9ybWFsOwoJfQoKCS5wb3B1cCBoMSB7CgkJbWFyZ2luLXRvcDogMDsKCQljb2xvcjogIzMzMzsKCQlmb250LWZhbWlseTogZm50OwoJCWZvbnQtc2l6ZTogMjRwdDsKCQlmb250LXdlaWdodDogYm9sZDsKCX0KCQoJLnBvcHVwIGgzIHsKCQltYXJnaW4tdG9wOiAwOwoJCWNvbG9yOiAjMzMzOwoJCWZvbnQtZmFtaWx5OiBmbnQ7CgkJZm9udC1zaXplOiAxMnB0OwoJCWZvbnQtd2VpZ2h0OiBib2xkOwoJfQkKCQoJLnBvcHVwIC5jbG9zZSB7CgkJcG9zaXRpb246IGFic29sdXRlOwoJCXRvcDogMjBweDsKCQlyaWdodDogNDBweDsKCQl0cmFuc2l0aW9uOiBhbGwgMjAwbXM7CgkJZm9udC1mYW1pbHk6IGZudDsKCQlmb250LXNpemU6IDMwcHg7CgkJZm9udC13ZWlnaHQ6IGJvbGQ7CgkJdGV4dC1kZWNvcmF0aW9uOiBub25lOwoJCWNvbG9yOiAjMzMzOwoJfQoJCgkucG9wdXAgLmNsb3NlOmhvdmVyIHsKCQljb2xvcjogI0RFN0UzNTsKCX0KCQoJLnBvcHVwIC5jb250ZW50IHsKCQlmb250LWZhbWlseTogZm50OwoJCW1heC1oZWlnaHQ6IDEwMCU7CgkJb3ZlcmZsb3cteTogc2Nyb2xsOwoJfQoJCgkuYnV0dG9uIHsKCQlmb250LWZhbWlseTogZm50OwoJCWZvbnQtd2VpZ2h0OiBub3JtYWw7CgkJZm9udC1zaXplOiAzMHB4OwoJCWNvbG9yOiAjREU3RTM1OwoJCWFsaWduOiBjZW50ZXI7Cgl9CgoJQG1lZGlhIHNjcmVlbiBhbmQgKG1heC13aWR0aDogOTgwcHgpewoJCS5ib3h7CgkJCXdpZHRoOiA4MCU7CgkJfQoJCS5wb3B1cHsKCQkJd2lkdGg6IDgwJTsKCQl9Cgl9CgkKCWltZyB7CgkJbWF4LXdpZHRoOiAxMDAlOwoJfQoJCglib2R5IHsgCgkJbWFyZ2luOiAwOwoJCXBhZGRpbmc6IDA7CgkJLXdlYmtpdC10ZXh0LXNpemUtYWRqdXN0OiBub25lOwoJCS13ZWJraXQtZm9udC1zbW9vdGhpbmc6IGFudGlhbGlhc2VkOwoJCS1tb3otb3N4LWZvbnQtc21vb3RoaW5nOiBncmF5c2NhbGU7CgkJYmFja2dyb3VuZDp1cmwoLi9pbWFnZXMvYmcuanBnKSBuby1yZXBlYXQgY2VudGVyIGNlbnRlciBmaXhlZDtiYWNrZ3JvdW5kLXNpemU6Y292ZXI7Cgl9CgkKPC9zdHlsZT4KPGJvZHk+CjxCUj4KPGRpdiBjbGFzcz0iYmFubmVyLXNlY3Rpb24iIGFsaWduPSJjZW50ZXIiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiAjRkZGRkZGOyI+PGltZyBzcmM9ImltYWdlcy9iYW5uZXIucG5nIiBhbHQ9IiIvPjwvZGl2Pgo8QlI+CltzdXJ2ZXl1cmxdCjxmb290ZXI+Cgk8ZGl2IGlkPSJmb290ZXItbWFpbiIgYWxpZ249ImNlbnRlciI+CgkJPGEgY2xhc3M9ImJ1dHRvbiIgaHJlZj0iI3BvcHVwMSI+VGVybXMgYW5kIENvbmRpdGlvbnM8L2E+Cgk8L2Rpdj4KCTxkaXYgaWQ9InBvcHVwMSIgY2xhc3M9Im92ZXJsYXkiPgoJCTxkaXYgY2xhc3M9InBvcHVwIj4KCQkJPGRpdiBjbGFzcz0iY29udGVudCI+CgkJCQk8YSBjbGFzcz0iY2xvc2UiIGhyZWY9IiMiPiZ0aW1lczs8L2E+CgkJCQk8ZGl2IGNsYXNzPSJoZWFkaW5nLXRpdGxlIj4KCQkJCQk8aDE+VEVSTVMgJiBDT05ESVRJT05TPC9oMT4KCQkJCTwvZGl2PgoJCQkJPHA+PGI+PGk+W3Byb21vdGlvbnRpdGxlXTwvaT48L2I+PC9wPgoJCQkJPEJSPgoJCQkJW3Byb21vdGlvbnRuY3NdCgkJCQk8QlI+CgkJCTwvZGl2PgoJCTwvZGl2PgoJPC9kaXY+CjwvZm9vdGVyPgo8L2JvZHk+CjwvaHRtbD4K}
+	bx: {PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KCQo8aGVhZD4KPHRpdGxlPltjbGllbnRuYW1lXTwvdGl0bGU+CjxtZXRhIGNoYXJzZXQ9InV0Zi04Ij4KPG1ldGEgbmFtZSA9ICJmb3JtYXQtZGV0ZWN0aW9uIiBjb250ZW50ID0gInRlbGVwaG9uZT1ubyIvPgo8bWV0YSBuYW1lID0gInZpZXdwb3J0IiBjb250ZW50ID0gIndpZHRoID0gZGV2aWNlLXdpZHRoLCBpbml0aWFsLXNjYWxlID0gMS4wLCBtYXhpbXVtLXNjYWxlPTEiLz4gCjwvaGVhZD4KCjwhLS0gYmFubmVyIGFuZCBzdXJ2ZXkgb3ZlciBhIGJnIGltYWdlLCB0bmNzIGFyZSBpbiBhIGNzcyBwb3B1cCBib3ggLS0+Cgo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPgoJCglAZm9udC1mYWNlIHsKCQlmb250LWZhbWlseTogZm50OwoJCWZvbnQtc2l6ZTogMTRwdDsKCQlzcmM6IHVybCguL2ZvbnRzL2ZvbnQub3RmKTsKCQlzcmM6IHVybCguL2ZvbnRzL2ZvbnQudHRmKTsKCX0KCS5vdmVybGF5IHsKCQlwb3NpdGlvbjogZml4ZWQ7CgkJdG9wOiAwOwoJCWJvdHRvbTogMDsKCQlsZWZ0OiAwOwoJCXJpZ2h0OiAwOwoJCWJhY2tncm91bmQ6IHJnYmEoMCwgMCwgMCwgMC43KTsKCQl0cmFuc2l0aW9uOiBvcGFjaXR5IDUwMG1zOwoJCXZpc2liaWxpdHk6IGhpZGRlbjsKCQlvcGFjaXR5OiAwOwoJfQoJLm92ZXJsYXk6dGFyZ2V0IHsKCQl2aXNpYmlsaXR5OiB2aXNpYmxlOwoJCW9wYWNpdHk6IDE7Cgl9CgkucG9wdXAgewoJCXRvcDogNTAlOwoJCWxlZnQ6IDUwJTsKCQl0cmFuc2Zvcm06IHRyYW5zbGF0ZSgtNTAlLCAtNTAlKTsKCQloZWlnaHQ6IDgwJTsKCQlwYWRkaW5nOiAyMHB4OwoJCWJhY2tncm91bmQ6ICNGRkZGRkY7CgkJYm9yZGVyLXJhZGl1czogNXB4OwoJCXdpZHRoOiA1MCU7CgkJcG9zaXRpb246IGZpeGVkOwoJCXRyYW5zaXRpb246IGFsbCA1cyBlYXNlLWluLW91dDsKCQlmb250LWZhbWlseTogZm50OwoJCWZvbnQtc2l6ZTogMTBwdDsKCQlmb250LXdlaWdodDogbm9ybWFsOwoJfQoJLnBvcHVwIGgxIHsKCQltYXJnaW4tdG9wOiAwOwoJCWNvbG9yOiAjMzMzMzMzOwoJCWZvbnQtZmFtaWx5OiBmbnQ7CgkJZm9udC1zaXplOiAyNHB0OwoJCWZvbnQtd2VpZ2h0OiBib2xkOwoJfQoJLnBvcHVwIGgzIHsKCQltYXJnaW4tdG9wOiAwOwoJCWNvbG9yOiAjMzMzMzMzOwoJCWZvbnQtZmFtaWx5OiBmbnQ7CgkJZm9udC1zaXplOiAxMnB0OwoJCWZvbnQtd2VpZ2h0OiBib2xkOwoJfQkKCS5wb3B1cCAuY2xvc2UgewoJCXBvc2l0aW9uOiBhYnNvbHV0ZTsKCQl0b3A6IDIwcHg7CgkJcmlnaHQ6IDQwcHg7CgkJdHJhbnNpdGlvbjogYWxsIDIwMG1zOwoJCWZvbnQtZmFtaWx5OiBmbnQ7CgkJZm9udC1zaXplOiAzMHB4OwoJCWZvbnQtd2VpZ2h0OiBib2xkOwoJCXRleHQtZGVjb3JhdGlvbjogbm9uZTsKCQljb2xvcjogIzMzMzsKCX0KCS5wb3B1cCAuY2xvc2U6aG92ZXIgewoJCWNvbG9yOiAjREU3RTM1OwoJfQoJLnBvcHVwIC5jb250ZW50IHsKCQlmb250LWZhbWlseTogZm50OwoJCW1heC1oZWlnaHQ6IDEwMCU7CgkJb3ZlcmZsb3cteTogc2Nyb2xsOwoJfQoJLmJ1dHRvbiB7CgkJZm9udC1mYW1pbHk6IGZudDsKCQlmb250LXdlaWdodDogbm9ybWFsOwoJCWZvbnQtc2l6ZTogMzBweDsKCQljb2xvcjogW2xpbmtjb2xvcl07CgkJYWxpZ246IGNlbnRlcjsKCX0KCUBtZWRpYSBzY3JlZW4gYW5kIChtYXgtd2lkdGg6IDk4MHB4KXsKCQkuYm94ewoJCQl3aWR0aDogODAlOwoJCX0KCQkucG9wdXB7CgkJCXdpZHRoOiA4MCU7CgkJfQoJfQoJLmJhbm5lcnNlY3Rpb24gewoJCW1hcmdpbjogMCBhdXRvOwoJCXBhZGRpbmctdG9wOiAzMHB4OwoJfQoJLnNob3J0Z2FwIHsKCQloZWlnaHQ6IDEwMHB4OwoJfQoJaW1nIHsKCQltYXgtd2lkdGg6IDEwMCU7CgkJaGVpZ2h0OiBhdXRvOwoJfQoJYm9keSB7IAoJCW1hcmdpbjogMDsKCQlwYWRkaW5nOiAwOwoJCWJhY2tncm91bmQ6IHJhZGlhbC1ncmFkaWVudChhdCB0b3AsIFtobGNvbG9yXSwgW2JnY29sb3JdKTsKCQktd2Via2l0LXRleHQtc2l6ZS1hZGp1c3Q6IG5vbmU7CgkJLXdlYmtpdC1mb250LXNtb290aGluZzogYW50aWFsaWFzZWQ7CgkJLW1vei1vc3gtZm9udC1zbW9vdGhpbmc6IGdyYXlzY2FsZTsKCQliYWNrZ3JvdW5kOnVybCguL2ltYWdlcy9iZy5qcGcpIG5vLXJlcGVhdCBjZW50ZXIgY2VudGVyIGZpeGVkO2JhY2tncm91bmQtc2l6ZTpjb3ZlcjsKCX0KCQo8L3N0eWxlPgo8Ym9keT4KPEJSPgo8ZGl2IGNsYXNzPSJiYW5uZXItc2VjdGlvbiIgYWxpZ249ImNlbnRlciI+PGltZyBzcmM9ImltYWdlcy9iYW5uZXIucG5nIiBhbHQ9IiIvPjwvZGl2Pgo8QlI+CltzdXJ2ZXl1cmxdCjxkaXYgY2xhc3M9InNob3J0Z2FwIj48L2Rpdj4KPGZvb3Rlcj4KCTxkaXYgaWQ9ImZvb3Rlci1tYWluIiBhbGlnbj0iY2VudGVyIj4KCQk8YSBjbGFzcz0iYnV0dG9uIiBocmVmPSIjcG9wdXAxIj5UZXJtcyBhbmQgQ29uZGl0aW9uczwvYT4KCTwvZGl2PgoJPGRpdiBpZD0icG9wdXAxIiBjbGFzcz0ib3ZlcmxheSI+CgkJPGRpdiBjbGFzcz0icG9wdXAiPgoJCQk8ZGl2IGNsYXNzPSJjb250ZW50Ij4KCQkJCTxhIGNsYXNzPSJjbG9zZSIgaHJlZj0iIyI+JnRpbWVzOzwvYT4KCQkJCTxkaXYgY2xhc3M9ImhlYWRpbmctdGl0bGUiPgoJCQkJCTxoMT5URVJNUyAmIENPTkRJVElPTlM8L2gxPgoJCQkJPC9kaXY+CgkJCQk8cD48Yj48aT5baGVhZGxpbmVdPC9pPjwvYj48L3A+CgkJCQk8QlI+CgkJCQlbcHJvbW90aW9udG5jc10KCQkJCTxCUj4KCQkJPC9kaXY+CgkJPC9kaXY+Cgk8L2Rpdj4KPC9mb290ZXI+CjxkaXYgY2xhc3M9InNob3J0Z2FwIj48L2Rpdj4KPC9ib2R5Pgo8L2h0bWw+Cg==}
 	write %./res/template_default.html debase bx
 	bx: 0
 	either exists? %./res/template_default.html [
 		h: read %./res/template_default.html
 	] [ print "error: could not make default template" h: "" ]
+]
+print "OK"
+
+prin "loading or making basic html template..."
+either exists? %./res/template_basic.html [
+    print [ "^-basic template already exists."]
+] [
+	bx: {PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KCQo8aGVhZD4KPHRpdGxlPltjbGllbnRuYW1lXTwvdGl0bGU+CjxtZXRhIGNoYXJzZXQ9InV0Zi04Ij4KPG1ldGEgbmFtZSA9ICJmb3JtYXQtZGV0ZWN0aW9uIiBjb250ZW50ID0gInRlbGVwaG9uZT1ubyIvPgo8bWV0YSBuYW1lID0gInZpZXdwb3J0IiBjb250ZW50ID0gIndpZHRoID0gZGV2aWNlLXdpZHRoLCBpbml0aWFsLXNjYWxlID0gMS4wLCBtYXhpbXVtLXNjYWxlPTEiLz4gCjwvaGVhZD4KCjwhLS0gYmFubmVyIGFuZCBzdXJ2ZXkgb3ZlciBhIGJnIGltYWdlIGlmIGV4aXN0cywgb3RoZXJ3aXNlIGdyYWRpZW50LiB0bmNzIGFyZSByZW5kZXJlZCBpbmxpbmUgYmVsb3cgdGhlIHN1cnZleSAtLT4KCjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+CgkKCUBmb250LWZhY2UgewoJCWZvbnQtZmFtaWx5OiBmbnQ7CgkJZm9udC1zaXplOiAxNHB0OwoJCXNyYzogdXJsKC4vZm9udHMvZm9udC5vdGYpOwoJCXNyYzogdXJsKC4vZm9udHMvZm9udC50dGYpOwoJfQoJLnRuY3MgewoJCW1hcmdpbjogMCBhdXRvOwoJCXBhZGRpbmc6IDQwcHg7CgkJYmFja2dyb3VuZDogI2ZmZjsKCQlib3JkZXItcmFkaXVzOiA1cHg7CgkJbWF4LXdpZHRoOiA4MCU7CgkJZm9udC1mYW1pbHk6IGZudDsKCQlmb250LXNpemU6IDEwcHQ7CgkJZm9udC13ZWlnaHQ6IG5vcm1hbDsKCX0KCS50bmNzIGgxIHsKCQltYXJnaW4tdG9wOiAwOwoJCWNvbG9yOiAjMzMzOwoJCWZvbnQtZmFtaWx5OiBmbnQ7CgkJZm9udC1zaXplOiAyNHB0OwoJCWZvbnQtd2VpZ2h0OiBib2xkOwoJfQoJLmJhbm5lcnNlY3Rpb24gewoJCW1hcmdpbjogMCBhdXRvOwoJCXBhZGRpbmctdG9wOiAzMHB4OwoJfQoJLnNob3J0Z2FwIHsKCQloZWlnaHQ6IDEwMHB4OwoJfQoJaW1nIHsKCQltYXgtd2lkdGg6IDEwMCU7CgkJaGVpZ2h0OiBhdXRvOwoJfQoJYm9keSB7IAoJCW1hcmdpbjogMCBhdXRvOwoJCXBhZGRpbmc6IDA7CgkJYmFja2dyb3VuZDogcmFkaWFsLWdyYWRpZW50KGF0IHRvcCwgW2hsY29sb3JdLCBbYmdjb2xvcl0pOwoJCS13ZWJraXQtdGV4dC1zaXplLWFkanVzdDogbm9uZTsKCQktd2Via2l0LWZvbnQtc21vb3RoaW5nOiBhbnRpYWxpYXNlZDsKCQktbW96LW9zeC1mb250LXNtb290aGluZzogZ3JheXNjYWxlOwoJfQoJCjwvc3R5bGU+Cjxib2R5Pgo8QlI+CjxkaXYgY2xhc3M9ImJhbm5lci1zZWN0aW9uIiBhbGlnbj0iY2VudGVyIj48aW1nIHNyYz0iaW1hZ2VzL2Jhbm5lci5wbmciIGFsdD0iIi8+PC9kaXY+CjxCUj4KW3N1cnZleXVybF0KPGRpdiBjbGFzcz0ic2hvcnRnYXAiPjwvZGl2Pgo8Zm9vdGVyPgo8ZGl2IGNsYXNzPSJ0bmNzIj4KPGgxPlRFUk1TICYgQ09ORElUSU9OUzwvaDE+CjxwPjxiPjxpPltoZWFkbGluZV08L2k+PC9iPjwvcD4KPEJSPgpbcHJvbW90aW9udG5jc10KPEJSPgo8L2Rpdj4KCjwvZm9vdGVyPgo8L2JvZHk+CjwvaHRtbD4K}
+	write %./res/template_basic.html debase bx
+	bx: 0
+	either exists? %./res/template_basic.html [
+	    print "^-basic template created."
+	] [ print "^-error: could not make default template" ]
 ]
 print "OK"
 
@@ -74,8 +87,8 @@ either exists? %./res/preset_default.tnc [
 	bx: 0
 	either exists? %./res/preset_default.tnc [
 		print "successfully wrote default preset to: ./res/preset_default.tnc"
-	] [ 
-		print "error: could not make default template" 
+	] [
+		print "error: could not make default template"
 	]
 ]
 print "OK"
@@ -83,8 +96,39 @@ print "OK"
 ;; display tile only, not used for anything else
 promotionfilename: "DramaQueen"
 
+prin "writing tabulatner function..."
+tabulatner: function [ h t m r tabi tabf ] [
+	o: copy t
+    parse o [ to "|" change "|" "" ]
+	print [ tabi "tabulatner attemts to strip leading pipe: " o ]
+	switch m [
+		1 [
+	 		parse o [ insert "<tr><td>" any [to ";" change ";" "</td><td>"] ] parse o [ any [ to "^/" change "^/" "</td></tr>^/<tr><td>"] to end change end "</td></tr>"]
+		]
+		2 [
+			parse o [ insert "<tr><td>" any [to "," change "," "</td><td>"] ] parse o [ any [ to "^/" change "^/" "</td></tr>^/<tr><td>"] to end change end "</td></tr>"]
+		]
+		3 [
+			parse o [ insert "<tr><td>" any [to "|" change "|" "</td><td>"] ] parse o [ any [ to "^/" change "^/" "</td></tr>^/<tr><td>"] to end change end "</td></tr>"]
+		]
+		4 [
+			parse o [ insert "<tr><td>" any [to "^-" change "^-" "</td><td>"] ] parse o [ any [ to "^/" change "^/" "</td></tr>^/<tr><td>"] to end change end "</td></tr>"]
+		]
+		5 [
+			if (r <> none) and (r <> "") [
+			    s: copy o
+			    do r
+				o: copy s
+			]
+		]
+	]
+	;o: rejoin [ "|" o ]
+	o
+]
+print "OK"
+
 prin "writing clauser function..."
-clauser: function [ t s m u tabi tby ] [
+clauser: function [ t s m u tm cr tabi tby ] [
 	prin [ tabi "clauser function triggered by " tby "..." ]
 	;print [ "^-clauser indentation = " m ]
 	;print [ "^-clauser strings = " s ]
@@ -97,11 +141,15 @@ clauser: function [ t s m u tabi tby ] [
 		return ""
 	] [
 		o: rejoin ["<li>" t "</li>" m/2/1 "^/"]
+		print [ tabi "^-section title : " o ]
 		c: 1
 		d: 2
 		tbs: copy []
 		j: #"-"
+		v: #"|"
 		td: 0
+		tbl: 0
+		ctab: false
 
 ;; get indentation values, retain previous value if line is blank
 ;; td is current indentation, d is next-line indentation
@@ -112,7 +160,7 @@ clauser: function [ t s m u tabi tby ] [
 				d: 3
 				if (line/2 = j) [ d: 4 ]
 			] [
-				if ((trim line) <> "") [ d: 2] 
+				if ((trim line) <> "") and (line/1 <> v) [ d: 2]
 			]
 			append tbs d
 		]
@@ -120,10 +168,12 @@ clauser: function [ t s m u tabi tby ] [
 ;; loop through lines of text, indent and tag as required
 
 		repeat x (length? tbs) [
-		
+
+			ctab: false
+
 ;; calc next-depth and offset
 ;; offset is -1 to account for depth of 1 being reserved for headers
-		
+
 			g: max 0 (min (x + 1) (length? tbs))
 			od: tbs/:g
 			td: tbs/:x
@@ -133,7 +183,7 @@ clauser: function [ t s m u tabi tby ] [
 
 ;; tab indent
 
-			pws: copy [] 
+			pws: copy []
 			loop (td - 1) [ append pws "^-" ]
 
 ;; list-tags
@@ -146,8 +196,19 @@ clauser: function [ t s m u tabi tby ] [
 
 			if tsx/1 = j [ tsx: replace tsx "--" "" ]
 			if tsx/1 = j [ tsx: replace tsx "-" "" ]
-			;print [ "current = " td "^/next = " d "^/offset = " ofs ]
+		    
+;; table rows, count when encountered, add head tail when count starts, add tail tag when count is broken & reset
 
+		    if tsx/1 = v [
+				print [ tabi "^-found a table row marker : " tsx/1 ]
+				tsx: tabulatner copy t copy tsx tm cr rejoin [ tabi "^-" ] "clauser" tbl: tbl + 1
+				li: "" cli: ""
+				if tbl = 1 [ li: "<table>" ]
+				pekn: min (x + 1) (length? tbs)
+				pekr: trim copy s/(pekn)
+				if pekr/1 <> v [ cli: "</table>" ctab: true ]
+			] 
+			print [ tabi "^-tsx after table check: " tsx ]
 
 ;; tagging
 
@@ -162,11 +223,13 @@ clauser: function [ t s m u tabi tby ] [
 				]
 				if ofs = 0 [
 					;print [ "^-next line is on the same level" ]
-					if tsx <> "" [ o: rejoin[ o pws li tsx cli "^/" ] ]
+					if tsx <> "" [
+					    o: rejoin [ o pws li tsx cli "^/" ]
+					]
 				]
 				if ofs = -1 [
 					;print [ "^-next line is unindented by 1" ]
-					o: rejoin[ o pws li tsx cli "^/" (take/part (copy pws) (td - 2)) m/(td)/2 "^/" ]
+				    o: rejoin [ o pws li tsx cli "^/" (take/part (copy pws) (td - 2)) m/(td)/2 "^/" ]
 				]
 				if ofs = -2 [
 					;print [ "^-next line is unindented by 2" ]
@@ -181,7 +244,7 @@ clauser: function [ t s m u tabi tby ] [
 		while [td > 0] [
 			pws: ""
 			loop td [ pws: rejoin [pws "^-"] ]
-			append o rejoin [ pws m/:d/2 "^/" ] td: td - 1 d: d - 1 
+			append o rejoin [ pws m/:d/2 "^/" ] td: td - 1 d: d - 1
 		]
 		append o m/2/2
 
@@ -201,6 +264,7 @@ clauser: function [ t s m u tabi tby ] [
 print "OK"
 
 
+
 ;; terms and conditions data: section names, section text, section html, indentation rules
 
 tncs: context [
@@ -210,13 +274,17 @@ tncs: context [
 
 	thtml: ["<li>GENERAL CONDITIONS</li>" "<li>PROMOTER</li>" "<li>PROMOTION PERIOD</li>" "<li>REDEMPTION OFFER</li>" "<li>APPLICABLE PRODUCTS</li>" "<li>EXCLUDED PRODUCTS</li>" "<li>HOW TO REDEEM</li>" "<li>DELIVERY</li>" "<li>DISCLAIMER AND RIGHTS OF THE PROMOTER</li>" "<li>PERSONAL INFORMATION</li>" "<li>LIABILITY</li>" "GOVERNING LAW"]
 
-	tind: [ 6 2 5 1 ] 
+	tind: [ 6 2 5 1 ]
 ]
 
 ;; promotion data =
-;; promotion_name client_name start_date end_date site_url site_user survey_url tnc_preset
+;; promotion_name client_name start_date end_date site_url site_user survey_url highlight_color background_color tnc_preset
 
-pset: [ "" "" "" "" "" "" "" "" "" "blank" ]
+pset: [ "" "" "" "" "" "" "" "" "" "" "" "" "" "blank" ]
+
+ttags: func [ ] [
+	 reduce [ "[clientname]" (clientname/text) "[headline]" (headline/text) "[starting]" (starting/text) "[ending]" (ending/text) "[hlcolor]" (hlcolor/text) "[bgcolor]" (bgcolor/text) "[linkcolor]" (linkcolor/text) ]
+]
 
 sidx: 1
 
@@ -306,7 +374,6 @@ loadtnc: func [ presetfile tabi tby ] [
 			clh/text: tncs/thtml/:sidx
 			n: "..."
 			if pname/text <> none [ n: pname/text ]
-			ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
 			print [ tabi "^-loadtnc func is changing the html source..." ]
 			m: writesrc n survey/text tncs/thtml h indents/(tncs/tind/1) ttags rejoin [ tabi "^-^-"] "loadtnc"
 			viewsrc/text: m
@@ -323,9 +390,8 @@ updatehtml: func [ t tabi tby ] [
 	if (t <> none) [
 		print [ tabi "^-updatehtml changed text is: " t ]
 		noupdate: true
-		ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
 		repeat th (length? tncs/thtml) [
-			tncs/thtml/:th: clauser tncs/thead/:th (split tncs/ttext/:th newline) (reduce [ indents/(tta/selected) indents/(ttb/selected) indents/(ttc/selected) indents/(ttd/selected) ]) ttags rejoin [ tabi "^-^-" ] "updatehtml"
+			tncs/thtml/:th: clauser tncs/thead/:th (split tncs/ttext/:th newline) (reduce [ indents/(tta/selected) indents/(ttb/selected) indents/(ttc/selected) indents/(ttd/selected) ]) ttags tablemode/selected customtablerule/text rejoin [ tabi "^-^-" ] "updatehtml"
 		]
 		print [ tabi "^-updatehtml is changing html source..." ]
 		m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags rejoin [ tabi "^-^-" ] "updatehtml"
@@ -340,6 +406,7 @@ print "OK"
 
 hidx: 1
 pidx: 0
+cmode: 0
 
 prin "making the ui..."
 v: layout [
@@ -361,22 +428,30 @@ v: layout [
 							unless none? htlidx [ htl/selected: htlidx ]
 							print "^-pol list is changing the promotion name field..."
 							pname/text: pset/2
+							print "^-pol list is changing the promotion headline field..."
+							headline/text: pset/3
 							print "^-pol list is changing the clientname field..."
-							clientname/text: pset/3
+							clientname/text: pset/4
 							print "^-pol list is changing the starting field..."
-							starting/text: pset/4 
+							starting/text: pset/5
 							print "^-pol list is changing the ending field..."
-							ending/text: pset/5
+							ending/text: pset/6
 							print "^-pol list is changing the siteurl field..."
-							siteurl/text: pset/6
+							siteurl/text: pset/7
 							print "^-pol list is changing the sitedir field..."
-							sitedir/text: pset/7
+							sitedir/text: pset/8
 							print "^-pol list is changing the siteusr field..."
-							siteusr/text: pset/8 
+							siteusr/text: pset/9
 							print "^-pol list is changing the survey field..."
-							survey/text: pset/9
+							survey/text: pset/10
+							print "^-pol list is changing the highlight color field..."
+							hlcolor/text: pset/11
+							print "^-pol list is changing the background color field..."
+							bgcolor/text: pset/12
+							print "^-pol list is changing the link color field..."
+							linkcolor/text: pset/13
 							print "^-pol list is changing the tnc preset name field..."
-							tncpretxt/text: pset/10
+							tncpretxt/text: pset/14
 							pf: to-file (rejoin ["./res/preset_" tncpretxt/text ".tnc"])
 							print "^-pol list is loading tncs..."
 							loadtnc pf "^-^-" "pol_list"
@@ -393,7 +468,7 @@ v: layout [
 							noupdate: false
 							pidx: face/selected
 						]
-						print "pol list change event is done.^/" 
+						print "pol list change event is done.^/"
 					]
 				]
 				return
@@ -403,7 +478,6 @@ v: layout [
 						unless noupdate [
 							print [ "promotion name event triggered..." ]
 							noupdate: true
-							ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
 							m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags "^-" "pname"
 							viewsrc/text: m
 							v/text: (rejoin [promotionfilename " *"])
@@ -414,8 +488,8 @@ v: layout [
 				]
 				button 80x30 "save" [
 					if (none? pname/text) or (pname/text = "") [ pname/text: "untitled" ]
-					pset: reduce [ htl/data/(htl/selected) pname/text clientname/text starting/text ending/text siteurl/text sitedir/text siteusr/text survey/text tncpretxt/text ]
-					repeat st (length? pset) [ if none? pset/:st [ pset/:st: "" ]] 
+					pset: reduce [ htl/data/(htl/selected) pname/text headline/text clientname/text starting/text ending/text siteurl/text sitedir/text siteusr/text survey/text linkcolor/text hlcolor/text bgcolor/text tncpretxt/text ]
+					repeat st (length? pset) [ if none? pset/:st [ pset/:st: "" ]]
 					write to-file (rejoin ["./res/promotion_" (replace (trim pname/text) " " "_") ".pro"]) pset
 					promotionfilename: (rejoin ["./res/promotion_" pname/text ".pro"])
 					noupdate: true
@@ -434,14 +508,13 @@ v: layout [
 						unless noupdate [
 							noupdate: true
 							h: read (to-file rejoin [ "./res/" face/data/(face/selected) ])
-							ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
 							m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags "^-" "html_template_list"
 							viewsrc/text: m
 							v/text: (rejoin [promotionfilename " *"])
 							noupdate: false
 						]
 						hidx: face/selected
-						print "html template list event done.^/" 
+						print "html template list event done.^/"
 					]
 				]
 				return
@@ -456,8 +529,19 @@ v: layout [
 					]
 				]
 				return
+				text 230x30 "t&c headline"
+				headline: field 520x30 on-change [
+					unless noupdate [
+						print "^/headline field event triggered..."
+						updatehtml face/text "^-" "headline"
+						v/text: (rejoin [promotionfilename " *"])
+						print "headline field event is done.^/"
+						noupdate: false
+					]
+				]
+				return
 				text 230x30 "promotion start (dd-mm-yyyy)"
-				starting: field 520x30 on-change [
+				starting: field 300x30 on-change [
 					unless noupdate [
 						print "^/starting field event triggered..."
 						updatehtml face/text "^-" "starting"
@@ -466,9 +550,10 @@ v: layout [
 						noupdate: false
 					]
 				]
+			    button 200x30 "pick" [ pscal/offset: face/offset ]
 				return
 				text 230x30 "promotion end (dd-mm-yyyy)"
-				ending: field 520x30 on-change [
+				ending: field 300x30 on-change [
 					unless noupdate [
 						print "^/ending field event triggered..."
 						updatehtml face/text "^-" "ending"
@@ -477,8 +562,9 @@ v: layout [
 						noupdate: false
 					]
 				]
+			    button 200x30 "pick" [ pecal/offset: face/offset ]
 				return
-				text 230x30 "site url (full url)"
+				text 230x30 "domain url (incl. http://)"
 				siteurl: field 520x30 on-change [
 					unless noupdate [ v/text: (rejoin [promotionfilename " *"]) ]
 				]
@@ -488,7 +574,7 @@ v: layout [
 					unless noupdate [ v/text: (rejoin [promotionfilename " *"]) ]
 				]
 				return
-				text 230x30 "site username"
+				text 230x30 "domain username"
 				siteusr: field 520x30 on-change [
 					unless noupdate [ v/text: (rejoin [promotionfilename " *"]) ]
 				]
@@ -497,12 +583,48 @@ v: layout [
 				survey: field 520x30 on-change [
 					unless noupdate [
 						print "^/survey field event triggered..."
-						updatehtml face/text "^-" "survey" 
+						updatehtml face/text "^-" "survey"
 						v/text: (rejoin [promotionfilename " *"])
 						print "survey field event is done.^/"
 						noupdate: false
 					]
 				]
+				return
+				text 230x30 "highlight color"
+				hlcolor: field 520x30 with [ text: "#FB6F40" ] on-change [
+					unless noupdate [
+						print "^/highlight color field event triggered..."
+						updatehtml face/text "^-" "hlcolor"
+						v/text: (rejoin [promotionfilename " *"])
+						print "hlcolor field event is done.^/"
+						noupdate: false
+					]
+				]
+				return
+				text 230x30 "background color"
+				bgcolor: field 520x30  with [ text: "#F2511B" ] on-change [
+					unless noupdate [
+						print "^/background color field event triggered..."
+						updatehtml face/text "^-" "bgcolor"
+						v/text: (rejoin [promotionfilename " *"])
+						print "bgcolor field event is done.^/"
+						noupdate: false
+					]
+				]
+				return
+				text 230x30 "link color"
+				linkcolor: field 520x30 with [ text: "#F2E0DA" ] on-change [
+					unless noupdate [
+						print "^/link color field event triggered..."
+						updatehtml face/text "^-" "linkcolor"
+						v/text: (rejoin [promotionfilename " *"])
+						print "linkcolor field event is done.^/"
+						noupdate: false
+					]
+				]
+				return
+			    pscal: calendar on-dbl-click [ starting/text: to-string face/data face/offset: -500x-500 ]
+				pecal: calendar on-dbl-click [ ending/text: to-string face/data face/offset: -500x-500 ]
 			]
 		]
 		"Banner image" [
@@ -577,21 +699,22 @@ v: layout [
 			cc: panel 370x630 [
 				below
 				text 80x20 "text"
-				cl: area 350x580 40.40.40 font-name "consolas" font-size 10 font-color 255.255.180 with [ text: tncs/ttext/1 ] on-change [
+				cl: area 350x580 40.40.40 font-name "consolas" font-size 10 font-color 255.255.180 on-change [
 					print "^/cl text has changed..."
-					either (face/text <> none) and (face/text <> "") [
-						unless noupdate [
-							noupdate: true
-							ttags: reduce [ "[clientname]" (clientname/text) "[starting]" (starting/text) "[ending]" (ending/text)]
-							tncs/thtml/:sidx: clauser tncs/thead/:sidx (split face/text newline) (reduce [ indents/(tta/selected) indents/(ttb/selected) indents/(ttc/selected) indents/(ttd/selected) ]) ttags "^-" "cl_text"
-							print "^-cl text is updating html source..."
-							m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags "^-" "cl_text"
-							viewsrc/text: m
-							print [ "^-cl is changing clh/text... " ] 
-							clh/text: tncs/thtml/:sidx
-							v/text: (rejoin [promotionfilename " *"])
-							sp/color: 100.70.55
-							noupdate: false
+					either (face/text <> none) [
+						tncs/thtml/:sidx: clauser tncs/thead/:sidx (split face/text newline) (reduce [ indents/(tta/selected) indents/(ttb/selected) indents/(ttc/selected) indents/(ttd/selected) ]) ttags tablemode/selected customtablerule/text "^-" "cl_text"
+						if (face/text <> "") [
+							unless noupdate [
+								noupdate: true
+								print "^-cl text is updating html source..."
+								m: writesrc pname/text survey/text tncs/thtml h indents/(tta/selected) ttags "^-" "cl_text"
+								viewsrc/text: m
+								print [ "^-cl is changing clh/text... " ]
+								clh/text: tncs/thtml/:sidx
+								v/text: (rejoin [promotionfilename " *"])
+								sp/color: 100.70.55
+								noupdate: false
+							]
 						]
 					] [
 						clh/text: ""
@@ -602,54 +725,83 @@ v: layout [
 			tt: panel 400x630 [
 				below
 				text 120x20 "html preview"
-				clh: area 380x220 30.35.40 font-name "consolas" font-size 8 font-color 80.255.80
-				text "indent articles with"
-				tta: drop-list 180x30 select 6 data indentlabels [
-					print [ "^/tta change event triggered..." ]
-					face/text: pick face/data face/selected
-					tncs/tind/1: face/selected
-					unless noupdate [
-						print [ "^-tta is updating all html..." ]
-						updatehtml face/text "^-" "tta"
-						sp/color: 100.70.55
+				clh: area 380x200 30.35.40 font-name "consolas" font-size 8 font-color 80.255.80
+
+				ttab: tab-panel 380x380 [
+					"list" [
+						below
+						text "indent articles with"
+						tta: drop-list 180x30 select 6 data indentlabels [
+							print [ "^/tta change event triggered..." ]
+							face/text: pick face/data face/selected
+							tncs/tind/1: face/selected
+							unless noupdate [
+								print [ "^-tta is updating all html..." ]
+								updatehtml face/text "^-" "tta"
+								sp/color: 100.70.55
+							]
+							print [ "tta change event is done.^/" ]
+						]
+						text "indent sections with"
+						ttb: drop-list 180x30 select 2 data indentlabels [
+							print [ "^/ttb change event triggered..." ]
+							face/text: pick face/data face/selected
+							tncs/tind/2: face/selected
+							unless noupdate [
+								print [ "^-ttb is updating all html..." ]
+								updatehtml face/text "^-^-" "ttb"
+								sp/color: 100.70.55
+							]
+							print [ "ttb change event is done.^/" ]
+						]
+						text "indent clauses with"
+						ttc: drop-list 180x30 select 5 data indentlabels [
+							print [ "^/ttc change event triggered..." ]
+							face/text: pick face/data face/selected
+							tncs/tind/3: face/selected
+							unless noupdate [
+								print [ "^-ttc is updating all html..." ]
+								updatehtml face/text "^-" "ttc"
+								sp/color: 100.70.55
+							]
+							print [ "ttc change event is done.^/" ]
+						]
+						text "indent paragraphs with"
+						ttd: drop-list 180x30 select 1 data indentlabels [
+							print [ "^/ttd change event triggered..." ]
+							face/text: pick face/data face/selected
+							tncs/tind/4: face/selected
+							unless noupdate [
+								print [ "^-ttd is updating all html..." ]
+								updatehtml face/text "^-" "ttd"
+								sp/color: 100.70.55
+							]
+							print [ "ttd change event is done.^/" ]
+						]
 					]
-					print [ "tta change event is done.^/" ]
-				]
-				text "indent sections with"
-				ttb: drop-list 180x30 select 2 data indentlabels [
-					print [ "^/ttb change event triggered..." ]
-					face/text: pick face/data face/selected
-					tncs/tind/2: face/selected
-					unless noupdate [
-						print [ "^-ttb is updating all html..." ]
-						updatehtml face/text "^-^-" "ttb"
-						sp/color: 100.70.55
+					"table" [
+						text 70x30 "method"
+						tablemode: drop-list 280x30 data [ "semicolon" "comma" "pipe" "tab" "custom" ] [
+							unless noupdate [
+								updatehtml "" "^-" "tablemode"
+								noupdate: true
+								v/text: (rejoin [promotionfilename " *"])
+								sp/color: 100.70.55
+								noupdate: false
+							]
+						]
+						return
+						text 170x30 "rule"
+						return
+					   	customtablerule: area 360x150 40.40.40 with [ text: {s: copy cl/text^/parse s [ insert "<tr><td>" any [ to "^;" change "^;" "</td><td>"] ] parse s [ any [ to "^^/" change "^^/" "</td></tr>^^/<tr><td>"] to end change end "</td></tr>"] } ]
+						return
+						button 120x30 "run parser"
 					]
-					print [ "ttb change event is done.^/" ]
-				]
-				text "indent clauses with"
-				ttc: drop-list 180x30 select 5 data indentlabels [
-					print [ "^/ttc change event triggered..." ]
-					face/text: pick face/data face/selected
-					tncs/tind/3: face/selected
-					unless noupdate [
-						print [ "^-ttc is updating all html..." ]
-						updatehtml face/text "^-" "ttc"
-						sp/color: 100.70.55
+				] on-change [
+					switch event/picked [
+						1 [ cmode: 0 ]
+						2 [ cmode: 2 ]
 					]
-					print [ "ttc change event is done.^/" ]
-				]
-				text "indent paragraphs with"
-				ttd: drop-list 180x30 select 1 data indentlabels [
-					print [ "^/ttd change event triggered..." ]
-					face/text: pick face/data face/selected
-					tncs/tind/4: face/selected
-					unless noupdate [
-						print [ "^-ttd is updating all html..." ]
-						updatehtml face/text "^-" "ttd"
-						sp/color: 100.70.55
-					]
-					print [ "ttd change event is done.^/" ]
 				]
 			]
 		]
@@ -674,7 +826,7 @@ v: layout [
 							call/wait/output rejoin ["./rebol upload.r [ " siteurl/text " " sitedir/text " " siteusr/text " [" kw "] %./pub/index.html %./pub/fonts/font.ttf %./pub/fonts/font.otf %./pub/images/banner.png %./pub/images/bg.png]"] huh
 							parse huh [remove thru "(none)" ]
 							co/text: huh
-							either exists? %./log.txt [ 
+							either exists? %./log.txt [
 								lo/text: read %./log.txt
 ;; wait for australian innernet...
 								wait 5
@@ -731,6 +883,7 @@ v: layout [
 			]
 		]
 	]
+	do [ pscal/offset: -500x-500 pecal/offset: -500x-500 ]
 ]
 print "OK"
 
