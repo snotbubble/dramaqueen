@@ -7,7 +7,7 @@ campaign site generator
 - [ ] finish custom table parser
 - [ ] fix list table skipping (don't indent after embedded table)
 - [ ] update embased defaults
-- [ ] wait for clearance before next update
+- [ ] wait for clearance before adding more useful tnc defaults
 - [ ] resizable ui (GTK issues)
 - [ ] resize limiting (GTK issues)
 - [ ] icons
