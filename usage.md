@@ -14,7 +14,7 @@
 6. save the campaign
 7. go to a sub-folder called pub and open test_index.html in a browser
 8. if the site looks good, go back to dramaqueen and select publish tab
-9. review server and user settings, hit publish. It will ask for your password before uploading
+9. review server and user settings, hit publish.
 10. review online site
 
 # advanced usage:
