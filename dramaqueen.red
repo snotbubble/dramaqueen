@@ -56,7 +56,7 @@ prin "loading or making default html template..."
 either exists? %./res/template_default.html [
 	h: read %./res/template_default.html
 ] [
-	bx: {PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KCQo8aGVhZD4KPHRpdGxlPltjbGllbnRuYW1lXTwvdGl0bGU+CjxtZXRhIGNoYXJzZXQ9InV0Zi04Ij4KPG1ldGEgbmFtZSA9ICJmb3JtYXQtZGV0ZWN0aW9uIiBjb250ZW50ID0gInRlbGVwaG9uZT1ubyIvPgo8bWV0YSBuYW1lID0gInZpZXdwb3J0IiBjb250ZW50ID0gIndpZHRoID0gZGV2aWNlLXdpZHRoLCBpbml0aWFsLXNjYWxlID0gMS4wLCBtYXhpbXVtLXNjYWxlPTEiLz4gCjwvaGVhZD4KCjwhLS0gYmFubmVyIGFuZCBzdXJ2ZXkgb3ZlciBhIGJnIGltYWdlLCB0bmNzIGFyZSBpbiBhIGNzcyBwb3B1cCBib3ggLS0+Cgo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPgoJCglAZm9udC1mYWNlIHsKCQlmb250LWZhbWlseTogZm50OwoJCWZvbnQtc2l6ZTogMTRwdDsKCQlzcmM6IHVybCguL2ZvbnRzL2ZvbnQub3RmKTsKCQlzcmM6IHVybCguL2ZvbnRzL2ZvbnQudHRmKTsKCX0KCS5vdmVybGF5IHsKCQlwb3NpdGlvbjogZml4ZWQ7CgkJdG9wOiAwOwoJCWJvdHRvbTogMDsKCQlsZWZ0OiAwOwoJCXJpZ2h0OiAwOwoJCWJhY2tncm91bmQ6IHJnYmEoMCwgMCwgMCwgMC43KTsKCQl0cmFuc2l0aW9uOiBvcGFjaXR5IDUwMG1zOwoJCXZpc2liaWxpdHk6IGhpZGRlbjsKCQlvcGFjaXR5OiAwOwoJfQoJLm92ZXJsYXk6dGFyZ2V0IHsKCQl2aXNpYmlsaXR5OiB2aXNpYmxlOwoJCW9wYWNpdHk6IDE7Cgl9CgkucG9wdXAgewoJCXRvcDogNTAlOwoJCWxlZnQ6IDUwJTsKCQl0cmFuc2Zvcm06IHRyYW5zbGF0ZSgtNTAlLCAtNTAlKTsKCQloZWlnaHQ6IDgwJTsKCQlwYWRkaW5nOiAyMHB4OwoJCWJhY2tncm91bmQ6ICNGRkZGRkY7CgkJYm9yZGVyLXJhZGl1czogNXB4OwoJCXdpZHRoOiA1MCU7CgkJcG9zaXRpb246IGZpeGVkOwoJCXRyYW5zaXRpb246IGFsbCA1cyBlYXNlLWluLW91dDsKCQlmb250LWZhbWlseTogZm50OwoJCWZvbnQtc2l6ZTogMTBwdDsKCQlmb250LXdlaWdodDogbm9ybWFsOwoJfQoJLnBvcHVwIGgxIHsKCQltYXJnaW4tdG9wOiAwOwoJCWNvbG9yOiAjMzMzMzMzOwoJCWZvbnQtZmFtaWx5OiBmbnQ7CgkJZm9udC1zaXplOiAyNHB0OwoJCWZvbnQtd2VpZ2h0OiBib2xkOwoJfQoJLnBvcHVwIGgzIHsKCQltYXJnaW4tdG9wOiAwOwoJCWNvbG9yOiAjMzMzMzMzOwoJCWZvbnQtZmFtaWx5OiBmbnQ7CgkJZm9udC1zaXplOiAxMnB0OwoJCWZvbnQtd2VpZ2h0OiBib2xkOwoJfQkKCS5wb3B1cCAuY2xvc2UgewoJCXBvc2l0aW9uOiBhYnNvbHV0ZTsKCQl0b3A6IDIwcHg7CgkJcmlnaHQ6IDQwcHg7CgkJdHJhbnNpdGlvbjogYWxsIDIwMG1zOwoJCWZvbnQtZmFtaWx5OiBmbnQ7CgkJZm9udC1zaXplOiAzMHB4OwoJCWZvbnQtd2VpZ2h0OiBib2xkOwoJCXRleHQtZGVjb3JhdGlvbjogbm9uZTsKCQljb2xvcjogIzMzMzsKCX0KCS5wb3B1cCAuY2xvc2U6aG92ZXIgewoJCWNvbG9yOiAjREU3RTM1OwoJfQoJLnBvcHVwIC5jb250ZW50IHsKCQlmb250LWZhbWlseTogZm50OwoJCW1heC1oZWlnaHQ6IDEwMCU7CgkJb3ZlcmZsb3cteTogc2Nyb2xsOwoJfQoJLmJ1dHRvbiB7CgkJZm9udC1mYW1pbHk6IGZudDsKCQlmb250LXdlaWdodDogbm9ybWFsOwoJCWZvbnQtc2l6ZTogMzBweDsKCQljb2xvcjogW2xpbmtjb2xvcl07CgkJYWxpZ246IGNlbnRlcjsKCX0KCUBtZWRpYSBzY3JlZW4gYW5kIChtYXgtd2lkdGg6IDk4MHB4KXsKCQkuYm94ewoJCQl3aWR0aDogODAlOwoJCX0KCQkucG9wdXB7CgkJCXdpZHRoOiA4MCU7CgkJfQoJfQoJLmJhbm5lcnNlY3Rpb24gewoJCW1hcmdpbjogMCBhdXRvOwoJCXBhZGRpbmctdG9wOiAzMHB4OwoJfQoJLnNob3J0Z2FwIHsKCQloZWlnaHQ6IDEwMHB4OwoJfQoJaW1nIHsKCQltYXgtd2lkdGg6IDEwMCU7CgkJaGVpZ2h0OiBhdXRvOwoJfQoJYm9keSB7IAoJCW1hcmdpbjogMDsKCQlwYWRkaW5nOiAwOwoJCWJhY2tncm91bmQ6IHJhZGlhbC1ncmFkaWVudChhdCB0b3AsIFtobGNvbG9yXSwgW2JnY29sb3JdKTsKCQktd2Via2l0LXRleHQtc2l6ZS1hZGp1c3Q6IG5vbmU7CgkJLXdlYmtpdC1mb250LXNtb290aGluZzogYW50aWFsaWFzZWQ7CgkJLW1vei1vc3gtZm9udC1zbW9vdGhpbmc6IGdyYXlzY2FsZTsKCQliYWNrZ3JvdW5kOnVybCguL2ltYWdlcy9iZy5qcGcpIG5vLXJlcGVhdCBjZW50ZXIgY2VudGVyIGZpeGVkO2JhY2tncm91bmQtc2l6ZTpjb3ZlcjsKCX0KCQo8L3N0eWxlPgo8Ym9keT4KPEJSPgo8ZGl2IGNsYXNzPSJiYW5uZXItc2VjdGlvbiIgYWxpZ249ImNlbnRlciI+PGltZyBzcmM9ImltYWdlcy9iYW5uZXIucG5nIiBhbHQ9IiIvPjwvZGl2Pgo8QlI+CltzdXJ2ZXl1cmxdCjxkaXYgY2xhc3M9InNob3J0Z2FwIj48L2Rpdj4KPGZvb3Rlcj4KCTxkaXYgaWQ9ImZvb3Rlci1tYWluIiBhbGlnbj0iY2VudGVyIj4KCQk8YSBjbGFzcz0iYnV0dG9uIiBocmVmPSIjcG9wdXAxIj5UZXJtcyBhbmQgQ29uZGl0aW9uczwvYT4KCTwvZGl2PgoJPGRpdiBpZD0icG9wdXAxIiBjbGFzcz0ib3ZlcmxheSI+CgkJPGRpdiBjbGFzcz0icG9wdXAiPgoJCQk8ZGl2IGNsYXNzPSJjb250ZW50Ij4KCQkJCTxhIGNsYXNzPSJjbG9zZSIgaHJlZj0iIyI+JnRpbWVzOzwvYT4KCQkJCTxkaXYgY2xhc3M9ImhlYWRpbmctdGl0bGUiPgoJCQkJCTxoMT5URVJNUyAmIENPTkRJVElPTlM8L2gxPgoJCQkJPC9kaXY+CgkJCQk8cD48Yj48aT5baGVhZGxpbmVdPC9pPjwvYj48L3A+CgkJCQk8QlI+CgkJCQlbcHJvbW90aW9udG5jc10KCQkJCTxCUj4KCQkJPC9kaXY+CgkJPC9kaXY+Cgk8L2Rpdj4KPC9mb290ZXI+CjxkaXYgY2xhc3M9InNob3J0Z2FwIj48L2Rpdj4KPC9ib2R5Pgo8L2h0bWw+Cg==}
+	bx: {PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KCQo8aGVhZD4KPHRpdGxlPltjbGllbnRuYW1lXTwvdGl0bGU+CjxtZXRhIGNoYXJzZXQ9InV0Zi04Ij4KPG1ldGEgbmFtZSA9ICJmb3JtYXQtZGV0ZWN0aW9uIiBjb250ZW50ID0gInRlbGVwaG9uZT1ubyIvPgo8bWV0YSBuYW1lID0gInZpZXdwb3J0IiBjb250ZW50ICJ3aWR0aCA9IGRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZSA9IDAuNSwgbWF4aW11bS1zY2FsZT0xIi8+IAo8L2hlYWQ+Cgo8IS0tIGJhbm5lciBhbmQgc3VydmV5IG92ZXIgYSBiZyBpbWFnZSwgdG5jcyBhcmUgaW4gYSBjc3MgcG9wdXAgYm94IC0tPgoKPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCQoJQGZvbnQtZmFjZSB7CgkJZm9udC1mYW1pbHk6IGZudDsKCQlmb250LXNpemU6IDE0cHQ7CgkJc3JjOiB1cmwoLi9mb250cy9mb250Lm90Zik7CgkJc3JjOiB1cmwoLi9mb250cy9mb250LnR0Zik7Cgl9Cgkub3ZlcmxheSB7CgkJcG9zaXRpb246IGZpeGVkOwoJCXRvcDogMDsKCQlib3R0b206IDA7CgkJbGVmdDogMDsKCQlyaWdodDogMDsKCQliYWNrZ3JvdW5kOiByZ2JhKDAsIDAsIDAsIDAuNyk7CgkJdHJhbnNpdGlvbjogb3BhY2l0eSA1MDBtczsKCQl2aXNpYmlsaXR5OiBoaWRkZW47CgkJb3BhY2l0eTogMDsKCX0KCS5vdmVybGF5OnRhcmdldCB7CgkJdmlzaWJpbGl0eTogdmlzaWJsZTsKCQlvcGFjaXR5OiAxOwoJfQoJLnBvcHVwIHsKCQl0b3A6IDUwJTsKCQlsZWZ0OiA1MCU7CgkJdHJhbnNmb3JtOiB0cmFuc2xhdGUoLTUwJSwgLTUwJSk7CgkJaGVpZ2h0OiA4MCU7CgkJcGFkZGluZzogMjBweDsKCQliYWNrZ3JvdW5kOiAjRkZGRkZGOwoJCWJvcmRlci1yYWRpdXM6IDVweDsKCQlwb3NpdGlvbjogZml4ZWQ7CgkJdHJhbnNpdGlvbjogYWxsIDAuNXMgZWFzZS1pbi1vdXQ7CgkJZm9udC1mYW1pbHk6IGZudDsKCQlmb250LXNpemU6IDEwcHQ7CgkJZm9udC13ZWlnaHQ6IG5vcm1hbDsKCX0KCS5wb3B1cCBoMSB7CgkJbWFyZ2luLXRvcDogMDsKCQljb2xvcjogIzMzMzMzMzsKCQlmb250LWZhbWlseTogZm50OwoJCWZvbnQtc2l6ZTogMjRwdDsKCQlmb250LXdlaWdodDogYm9sZDsKCX0KCS5wb3B1cCBoMyB7CgkJbWFyZ2luLXRvcDogMDsKCQljb2xvcjogIzMzMzMzMzsKCQlmb250LWZhbWlseTogZm50OwoJCWZvbnQtc2l6ZTogMTJwdDsKCQlmb250LXdlaWdodDogYm9sZDsKCX0JCgkucG9wdXAgLmNsb3NlIHsKCQlwb3NpdGlvbjogYWJzb2x1dGU7CgkJdG9wOiAyMHB4OwoJCXJpZ2h0OiA0MHB4OwoJCXRyYW5zaXRpb246IGFsbCAyMDBtczsKCQlmb250LWZhbWlseTogZm50OwoJCWZvbnQtc2l6ZTogMzBweDsKCQlmb250LXdlaWdodDogYm9sZDsKCQl0ZXh0LWRlY29yYXRpb246IG5vbmU7CgkJY29sb3I6ICMzMzM7Cgl9CgkucG9wdXAgLmNsb3NlOmhvdmVyIHsKCQljb2xvcjogI0RFN0UzNTsKCX0KCS5wb3B1cCAuY29udGVudCB7CgkJcGFkZGluZy1yaWdodDogMzBweDsKCQlmb250LWZhbWlseTogZm50OwoJCW1heC1oZWlnaHQ6IDEwMCU7CgkJb3ZlcmZsb3cteTogc2Nyb2xsOwoJfQoJLmJ1dHRvbiB7CgkJZm9udC1mYW1pbHk6IGZudDsKCQlmb250LXdlaWdodDogbm9ybWFsOwoJCWZvbnQtc2l6ZTogMzBweDsKCQljb2xvcjogW2xpbmtjb2xvcl07CgkJYWxpZ246IGNlbnRlcjsKCX0KCUBtZWRpYSBzY3JlZW4gewoJCS5ib3h7CgkJCXdpZHRoOiA4MCU7CgkJfQoJCS5wb3B1cHsKCQkJd2lkdGg6IDgwJTsKCQl9Cgl9CgkuYmFubmVyc2VjdGlvbiB7CgkJbWFyZ2luOiAwIGF1dG87CgkJcGFkZGluZy10b3A6IDMwcHg7CgkJdGV4dC1hbGlnbjogY2VudGVyOwoJfQoJLnNob3J0Z2FwIHsKCQloZWlnaHQ6IDEwMHB4OwoJfQoJaW1nIHsKCQltYXgtd2lkdGg6IDEwMCU7CgkJaGVpZ2h0OiBhdXRvOwoJfQoJYm9keSB7IAoJCW1hcmdpbjogMDsKCQlwYWRkaW5nOiAwOwoJCWJhY2tncm91bmQ6IHJhZGlhbC1ncmFkaWVudChhdCB0b3AsIFtobGNvbG9yXSwgW2JnY29sb3JdKTsKCQktd2Via2l0LXRleHQtc2l6ZS1hZGp1c3Q6IG5vbmU7CgkJLXdlYmtpdC1mb250LXNtb290aGluZzogYW50aWFsaWFzZWQ7CgkJLW1vei1vc3gtZm9udC1zbW9vdGhpbmc6IGdyYXlzY2FsZTsKCQliYWNrZ3JvdW5kOnVybCguL2ltYWdlcy9iZy5qcGcpIG5vLXJlcGVhdCBjZW50ZXIgY2VudGVyIGZpeGVkO2JhY2tncm91bmQtc2l6ZTpjb3ZlcjsKCX0KCQo8L3N0eWxlPgo8Ym9keT4KPEJSPgo8ZGl2IGNsYXNzPSJiYW5uZXItc2VjdGlvbiIgYWxpZ249ImNlbnRlciI+PGltZyBzcmM9ImltYWdlcy9iYW5uZXIucG5nIiBhbHQ9IiIvPjwvZGl2Pgo8QlI+CltzdXJ2ZXl1cmxdCjxkaXYgY2xhc3M9InNob3J0Z2FwIj48L2Rpdj4KPGZvb3Rlcj4KCTxkaXYgaWQ9ImZvb3Rlci1tYWluIiBhbGlnbj0iY2VudGVyIj4KCQk8YSBjbGFzcz0iYnV0dG9uIiBocmVmPSIjcG9wdXAxIj5UZXJtcyBhbmQgQ29uZGl0aW9uczwvYT4KCTwvZGl2PgoJPGRpdiBpZD0icG9wdXAxIiBjbGFzcz0ib3ZlcmxheSI+CgkJPGRpdiBjbGFzcz0icG9wdXAiPgoJCQk8ZGl2IGNsYXNzPSJjb250ZW50Ij4KCQkJCTxhIGNsYXNzPSJjbG9zZSIgaHJlZj0iIyI+JnRpbWVzOzwvYT4KCQkJCTxkaXYgY2xhc3M9ImhlYWRpbmctdGl0bGUiPgoJCQkJCTxoMT5URVJNUyAmIENPTkRJVElPTlM8L2gxPgoJCQkJPC9kaXY+CgkJCQk8cD48Yj48aT5baGVhZGxpbmVdPC9pPjwvYj48L3A+CgkJCQk8QlI+CgkJCQlbcHJvbW90aW9udG5jc10KCQkJCTxCUj4KCQkJPC9kaXY+CgkJPC9kaXY+Cgk8L2Rpdj4KPC9mb290ZXI+CjxkaXYgY2xhc3M9InNob3J0Z2FwIj48L2Rpdj4KPC9ib2R5Pgo8L2h0bWw+Cg==}
 	write %./res/template_default.html debase bx
 	bx: 0
 	either exists? %./res/template_default.html [
@@ -129,9 +129,10 @@ print "OK"
 
 prin "writing clauser function..."
 clauser: function [ t s m u tm cr tabi tby ] [
-	prin [ tabi "clauser function triggered by " tby "..." ]
+	print [ tabi "clauser function triggered by " tby "..." ]
 	;print [ "^-clauser indentation = " m ]
 	;print [ "^-clauser strings = " s ]
+	print [ tabi "check section title =" t ] 
 	;probe s
 
 ;; skip if empty
@@ -140,10 +141,16 @@ clauser: function [ t s m u tm cr tabi tby ] [
 		print [ "skipping empty section (" t ")" ]
 		return ""
 	] [
-		o: rejoin ["<li>" t "</li>" m/2/1 "^/"]
-		print [ tabi "^-section title : " o ]
-		c: 1
-		d: 2
+		either (t = none) or ((trim t) = "") [
+			c: 1
+			d: 2
+			o: {}
+		] [
+			o: rejoin ["<li>" t "</li>" m/2/1 "^/"]
+			print [ tabi "^-section title found : " o ]
+			c: 1
+			d: 2
+		]
 		tbs: copy []
 		j: #"-"
 		v: #"|"
@@ -208,7 +215,7 @@ clauser: function [ t s m u tm cr tabi tby ] [
 				pekr: trim copy s/(pekn)
 				if pekr/1 <> v [ cli: "</table>" ctab: true ]
 			] 
-			print [ tabi "^-tsx after table check: " tsx ]
+			;print [ tabi "^-tsx after table check: " tsx ]
 
 ;; tagging
 
@@ -216,6 +223,7 @@ clauser: function [ t s m u tm cr tabi tby ] [
 				if ofs = 1 [
 					;print [ "^-next line is indented" ]
 					o: rejoin[ o pws li tsx cli m/(d)/1 "^/" ]
+					probe o
 				]
 				if ofs = 2 [
 					;print [ "^-next line is indented by 2" ]
@@ -246,7 +254,7 @@ clauser: function [ t s m u tm cr tabi tby ] [
 			loop td [ pws: rejoin [pws "^-"] ]
 			append o rejoin [ pws m/:d/2 "^/" ] td: td - 1 d: d - 1
 		]
-		append o m/2/2
+		if (t <> "") or (t <> none) [ append o m/2/2 ]
 
 ;; replace setup tags with field values
 
@@ -307,7 +315,7 @@ writesrc: function [n s c ht i u tabi tby ] [
 	either (none? s) or (s = "") [
 		replace o "[surveyurl]" ""
 	] [
-		replace o "[surveyurl]" (rejoin ["<div id=^"mid-container^" align=^"center^"> ^/ ^- <iframe height=^"700^" width=^"640^" frameborder=^"0^" allowtransparency=^"true^" style=^"background: #FFFFFF;^" src=^"" s "^"></iframe>^/</div>"])
+		replace o "[surveyurl]" (rejoin ["<div id=^"mid-container^" align=^"center^"> ^/ ^- <iframe height=^"760^" width=^"640^" frameborder=^"0^" allowtransparency=^"true^" style=^"background: #FFFFFF;^" src=^"" s "^"></iframe>^/</div>"])
 	]
 	replace o "[promotiontncs]" (rejoin [i/1 "^/" (rejoin l ) i/2 "^/" g])
 
@@ -488,7 +496,7 @@ v: layout [
 				]
 				button 80x30 "save" [
 					if (none? pname/text) or (pname/text = "") [ pname/text: "untitled" ]
-					pset: reduce [ htl/data/(htl/selected) pname/text headline/text clientname/text starting/text ending/text siteurl/text sitedir/text siteusr/text survey/text linkcolor/text hlcolor/text bgcolor/text tncpretxt/text ]
+					pset: reduce [ htl/data/(htl/selected) pname/text headline/text clientname/text starting/text ending/text siteurl/text sitedir/text siteusr/text survey/text hlcolor/text bgcolor/text linkcolor/text tncpretxt/text ]
 					repeat st (length? pset) [ if none? pset/:st [ pset/:st: "" ]]
 					write to-file (rejoin ["./res/promotion_" (replace (trim pname/text) " " "_") ".pro"]) pset
 					promotionfilename: (rejoin ["./res/promotion_" pname/text ".pro"])
